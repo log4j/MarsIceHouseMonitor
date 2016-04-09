@@ -154,13 +154,7 @@ public class MainFrame {
 		enableAllButton.setText("Enable All");
 		enableAllButton.setBounds(200, 20, 120, 30);
 		
-		enableAllButton.addMouseListener(
-				new MouseAdapter(){
-					@Override
-					public void mouseUp(MouseEvent arg0) {
-						facade.enableAllMonitor();
-					}
-				});
+		
 		
 		
 		
@@ -173,7 +167,7 @@ public class MainFrame {
 		disableAllButton.addMouseListener(
 				new MouseAdapter(){
 					@Override
-					public void mouseUp(MouseEvent arg0) {
+					public void mouseUp(MouseEvent e) {
 						facade.disableAllMonitor();
 					}
 				});
@@ -182,6 +176,22 @@ public class MainFrame {
 		clearAlarmButton.setText("Fix All");
 		clearAlarmButton.setBounds(200, 100, 120, 30);
 
+		
+
+		enableTemperatureAndHumidity = new Button(shell, SWT.PUSH);
+		enableTemperatureAndHumidity.setText("Enable Temp Humidity");
+		enableTemperatureAndHumidity.setBounds(200, 140, 160, 30);
+		
+		facade = new ControllerFacade();
+		
+		enableAllButton.addMouseListener(
+				new MouseAdapter(){
+					@Override
+					public void mouseUp(MouseEvent e) {
+						facade.enableAllMonitor();
+					}
+				});
+		
 		clearAlarmButton.addMouseListener(
 				new MouseAdapter(){
 					@Override
@@ -189,10 +199,6 @@ public class MainFrame {
 						facade.fixAllMonitor();
 					}
 				});
-
-		enableTemperatureAndHumidity = new Button(shell, SWT.PUSH);
-		enableTemperatureAndHumidity.setText("Enable Temp Humidity");
-		enableTemperatureAndHumidity.setBounds(200, 140, 160, 30);
 
 		enableTemperatureAndHumidity.addMouseListener(
 				new MouseAdapter(){
@@ -203,7 +209,7 @@ public class MainFrame {
 				});
 		
 
-		facade = new ControllerFacade();
+		
 		helper = new UpdateHelper(this);
 
 		 //this.updateData();

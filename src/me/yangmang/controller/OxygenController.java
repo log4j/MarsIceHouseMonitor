@@ -20,8 +20,12 @@ public class OxygenController extends AbstractController{
 			public void run() {
 				while (isEnable) {
 					
+					if(data==null){
+						data = 21.7;
+					}
+					
 					if(!hasAlarm){
-						double value = (Math.random()-0.5) * 2 + 21;
+						double value = (Math.random()-0.4) * 0.2 + Double.parseDouble(String.valueOf(data));
 						data = value;
 						
 						if(value>21.95){

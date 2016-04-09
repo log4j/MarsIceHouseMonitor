@@ -13,9 +13,6 @@ public class ControllerFacade {
 	private Map<String,DataModel> dataMap;
 	private Map<String,AbstractController> ctrlMap;
 	
-	
-	
-	
 	public ControllerFacade(){
 		
 		dataMap = new HashMap<String,DataModel>();
@@ -44,16 +41,12 @@ public class ControllerFacade {
 		pressureController.enable();
 		temperatureController.enable();
 	}
-	
 	public void disableAllMonitor(){
 		humidityController.disable();
 		oxygenController.disable();
 		pressureController.disable();
 		temperatureController.disable();
 	}
-	
-	
-	
 	public void enableMonitors(String... arg){
 		if(arg!=null){
 			for(String key : arg){
@@ -62,7 +55,6 @@ public class ControllerFacade {
 			}
 		}
 	}
-	
 	public void fixAllMonitor(){
 		humidityController.fix();
 		oxygenController.fix();

@@ -6,7 +6,6 @@ public class TemperatureController extends AbstractController{
 
 
 	protected Thread sensor;
-
 	private DecimalFormat format = new DecimalFormat("0.00");
 
 	public TemperatureController() {
@@ -20,8 +19,11 @@ public class TemperatureController extends AbstractController{
 			public void run() {
 				while (isEnable) {
 					
+					if(data==null)
+						data = 70;
+					
 					if(!hasAlarm){
-						double value = (Math.random()-0.5) * 5 + 70;
+						double value = (Math.random()-0.4) * 0.2 + Double.parseDouble(String.valueOf(data));
 						data = value;
 						
 						if(value>72){

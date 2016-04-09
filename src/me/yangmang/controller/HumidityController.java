@@ -19,8 +19,12 @@ public class HumidityController extends AbstractController {
 			public void run() {
 				while (isEnable) {
 					
+					if(data==null)
+						data = 60;
+					
 					if(!hasAlarm){
-						double value = (Math.random()-0.5) * 40 + 60;
+						double value = (Math.random()-0.4) * 0.5 + Double.parseDouble(String.valueOf(data));
+						
 						data = value;
 						
 						if(value>75){

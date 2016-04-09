@@ -20,8 +20,11 @@ public class PressureController extends AbstractController{
 			public void run() {
 				while (isEnable) {
 					
+					if(data==null)
+						data = 14.5;
+					
 					if(!hasAlarm){
-						double value = (Math.random()-0.5) * 2 + 14.5;
+						double value = (Math.random()-0.4) * 0.2 + Double.parseDouble(String.valueOf(data));
 						data = value;
 						
 						if(value>14.9){
