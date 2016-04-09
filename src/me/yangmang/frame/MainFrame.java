@@ -40,6 +40,8 @@ public class MainFrame {
 	private Label humidityDataLabel;
 	private Label humidityAlarmLabel;
 	
+	
+	
 
 	private Button enableAllButton, disableAllButton, clearAlarmButton,enableTemperatureAndHumidity;
 
