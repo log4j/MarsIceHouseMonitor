@@ -40,11 +40,11 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 	protected List<DataModel> generateModel(){
 		List<DataModel> list = new ArrayList<DataModel>();
 		
-		list.add(new DataModelTemperature("Outer Temperature"));
+		list.add(new DataModelTemperature("Outer Temperature", this));
 		
-		list.add(new DataModelTemperature("Inner Temperature"));
+		list.add(new DataModelTemperature("Inner Temperature", this));
 		
-		list.add(new DataModelHumidity("Humidity"));
+		list.add(new DataModelHumidity("Humidity", this));
 		
 		
 		
@@ -56,7 +56,12 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 
 	@Override
 	public boolean takeAction(String modelName, int cmd) {
-		
+		DataModel model = this.models.get(modelName);
+		if(model!=null){
+			model.setToBestValue();
+			
+			System.out.println(model.getData());
+		}
 		return false;
 	}
 

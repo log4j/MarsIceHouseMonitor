@@ -64,8 +64,14 @@ public abstract class DataModel extends Observable{
 	public String getDataString() {
 		return this.fortmat.format(this.data)+this.unit;
 	}
-	
+	/**
+	 * generate fake data
+	 */
 	public void generateFakeData(){
+		if(this.isAlarming()){
+			//if alarming, stop generating new data
+			return;
+		}
 		if(Math.random()<this.howManyPercentageToAdd)
 			this.data += this.vibeRate;
 		else
@@ -80,6 +86,11 @@ public abstract class DataModel extends Observable{
 		this.notifyObservers();
 	}
 	
+	public void setToBestValue(){
+		this.data = this.bestValue;
+		this.setChanged();
+		this.notifyObservers();
+	}
 	
 //	protected 
 }

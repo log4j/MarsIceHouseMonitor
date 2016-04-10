@@ -49,6 +49,9 @@ public class IndicatorPanel extends Composite implements Observer{
 			@Override
 			public void mouseUp(MouseEvent e) {
 				System.out.println("Fix clicked");
+				if(model!=null){
+					model.sendRobotToFix();
+				}
 			}
 			
 		});
@@ -65,10 +68,16 @@ public class IndicatorPanel extends Composite implements Observer{
 			nameLabel.setText(model.getModelName());
 			valueLabel.setText(model.getDataString());
 			alarmLabel.setText(model.isAlarming()?"Alarm!!!":"");
+			
+			System.out.println(model.isAlarming());
 		}else{
 			nameLabel.setText("NA");
 		}
 //		System.out.println(model.getData());
+		
+		
+		this.pack();
+		this.redraw();
 	}
 
 	@Override

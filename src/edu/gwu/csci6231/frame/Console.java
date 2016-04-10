@@ -29,11 +29,19 @@ public class Console extends Composite implements Observer{
 		IndicatorPanel indicator = new IndicatorPanel(this,SWT.None,model);
 		indicators.add(indicator);
 		model.addObserver(indicator);
+		model.addObserver(this);
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		
+		if(this.getDisplay().isDisposed())
+			return;
+		this.getDisplay().asyncExec(new Runnable() {
+			@Override
+			public void run() {
+				pack();
+			}
+		});
 		
 	}
 
