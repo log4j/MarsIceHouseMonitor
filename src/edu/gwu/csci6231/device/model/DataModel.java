@@ -62,7 +62,7 @@ public abstract class DataModel extends Observable{
 	}
 	
 	public String getDataString() {
-		return this.fortmat.format(this.data)+this.unit;
+		return this.fortmat.format(this.data);
 	}
 	/**
 	 * generate fake data
@@ -90,6 +90,26 @@ public abstract class DataModel extends Observable{
 		this.data = this.bestValue;
 		this.setChanged();
 		this.notifyObservers();
+	}
+
+
+	public String getUnit() {
+		return this.unit;
+	}
+
+
+	public double getBestValue() {
+		return bestValue;
+	}
+
+
+	public double getMinSafeValue() {
+		return minSafeValue;
+	}
+
+
+	public double getMaxSafeValue() {
+		return maxSafeValue;
 	}
 	
 //	protected 

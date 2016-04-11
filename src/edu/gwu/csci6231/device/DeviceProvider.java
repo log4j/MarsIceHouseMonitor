@@ -6,6 +6,8 @@ import java.util.Set;
 import edu.gwu.csci6231.device.model.DataModel;
 
 public abstract class DeviceProvider {
+	
+	public static int REFRESH_RATE = 200;
 
 	protected Map<String,DataModel> models;
 	

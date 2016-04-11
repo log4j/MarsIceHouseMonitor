@@ -91,15 +91,13 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 	public void run() {
 		
 		while(this.running){
-			System.out.println("Randoming");
 			
 			for(DataModel model: models.values()){
 				model.updateValue();
-				
 			}
 			
 			try {
-				Thread.sleep(1000);
+				Thread.sleep(DeviceProvider.REFRESH_RATE);
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
