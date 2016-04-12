@@ -8,11 +8,14 @@ import edu.gwu.csci6231.device.DeviceProvider;
 
 public abstract class DataModel extends Observable{
 
-	public static int CMD_REPAIR = 0x1;
-	public static int CMD_CAMERA_UP = 0x11;
-	public static int CMD_CAMERA_DOWN = 0x12;
-	public static int CMD_CAMERA_LEFT = 0x13;
-	public static int CMD_CAMERA_RIGHT = 0x14;
+	public static final int CMD_REPAIR = 0x1;
+	public static final int CMD_CAMERA_UP = 0x11;
+	public static final int CMD_CAMERA_DOWN = 0x12;
+	public static final int CMD_CAMERA_LEFT = 0x13;
+	public static final int CMD_CAMERA_RIGHT = 0x14;
+	public static final int CMD_CAMERA_ZOOM_IN = 0x15;
+	public static final int CMD_CAMERA_ZOOM_OUT = 0x16;
+	public static final int CMD_CAMERA_REMOVE = 0x17;
 	
 	protected double data = 0;
 	protected String modelName;
@@ -141,6 +144,17 @@ public abstract class DataModel extends Observable{
 		this.howManyPercentageToAdd = howManyPercentageToAdd;
 	}
 	
+	/**
+	 * response to a CMD request
+	 * it may be adjusting camera, send a robot, and so on
+	 * @param cmd
+	 * @return
+	 */
+	public boolean takeAction(int cmd){
+		if(this.provider==null)
+			return false;
+		return this.provider.takeAction(this.modelName, cmd);
+	}
 	
 	
 //	protected 

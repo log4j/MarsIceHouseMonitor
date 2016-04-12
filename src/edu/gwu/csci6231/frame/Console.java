@@ -14,9 +14,10 @@ public class Console extends Composite implements Observer{
 
 	
 	private List<IndicatorPanel> indicators;
+	public static int TARGET_INDICATOR = 1;
 	
 	private List<CameraPanel> cameras;
-	
+	public static int TARGET_CAMERA = 2;
 	
 	public Console(Composite parent, int mode) {
 		super(parent, mode);
@@ -25,25 +26,47 @@ public class Console extends Composite implements Observer{
 	
 		
 		indicators = new ArrayList<IndicatorPanel>();
+		cameras = new ArrayList<CameraPanel>();
 		
-		CameraPanel c = new CameraPanel(this, SWT.NONE);
-		c.setBounds(IndicatorPanel.WIDTH + 20, 10, 210, 210);
 		
 	}
 	
-	public void addDataModel(DataModel model){
-		IndicatorPanel indicator = new IndicatorPanel(this,SWT.NONE,model);
-		indicators.add(indicator);
-		indicator.setBgColor(FrameUtil.INDICATOR_BGS[indicators.size()%FrameUtil.INDICATOR_BGS.length]);
-		indicator.setFgColor(FrameUtil.INDICATOR_FGS[indicators.size()%FrameUtil.INDICATOR_FGS.length]);
-		indicator.setSubTitleColor(FrameUtil.INDICATOR_TITLECOLORS[indicators.size()%FrameUtil.INDICATOR_TITLECOLORS.length]);
-		indicator.setBounds(10, 10 + (5+IndicatorPanel.HEIGHT) * (indicators.size()-1), IndicatorPanel.WIDTH, IndicatorPanel.HEIGHT);
-		model.addObserver(indicator);
+	public void addDataModel(DataModel model, int target){
+		if(target == TARGET_CAMERA){
+			CameraPanel camera = new CameraPanel(this, SWT.NONE, model);
+			cameras.add(camera);
+			camera.setBounds(IndicatorPanel.WIDTH + 20 + ((cameras.size()-1)%2)*(5+CameraPanel.WIDTH), 10 + (5+CameraPanel.HEIGHT)*((int)((cameras.size()-1)/2)), CameraPanel.WIDTH, CameraPanel.HEIGHT);
+			model.addObserver(camera);
+			
+		}else if(target == TARGET_INDICATOR){
+			IndicatorPanel indicator = new IndicatorPanel(this,SWT.NONE,model);
+			indicators.add(indicator);
+			indicator.setBgColor(FrameUtil.INDICATOR_BGS[indicators.size()%FrameUtil.INDICATOR_BGS.length]);
+			indicator.setFgColor(FrameUtil.INDICATOR_FGS[indicators.size()%FrameUtil.INDICATOR_FGS.length]);
+			indicator.setSubTitleColor(FrameUtil.INDICATOR_TITLECOLORS[indicators.size()%FrameUtil.INDICATOR_TITLECOLORS.length]);
+			indicator.setBounds(10, 10 + (5+IndicatorPanel.HEIGHT) * (indicators.size()-1), IndicatorPanel.WIDTH, IndicatorPanel.HEIGHT);
+			model.addObserver(indicator);
+		}
+		
 		model.addObserver(this);
 	}
 
 	@Override
-	public void update(Observable o, Object arg) {
+	public void update(Observable o, Object msg) {
+		
+		if(msg!=null){
+			if(msg.equals(FrameUtil.MSG_REMOVE_MODEL)){
+				for(int i=0;i<cameras.size();i++){
+					if(cameras.get(i).hasModel((DataModel)o)){
+						//remove that model
+						cameras.get(i).dispose();
+						cameras.remove(i);
+					}
+				}
+			}
+		}
+		
+		
 		if(this.isDisposed()||this.getDisplay().isDisposed())
 			return;
 		this.getDisplay().asyncExec(new Runnable() {

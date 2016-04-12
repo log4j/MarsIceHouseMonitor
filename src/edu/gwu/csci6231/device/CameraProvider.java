@@ -1,22 +1,120 @@
 package edu.gwu.csci6231.device;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-public class CameraProvider extends DeviceProvider{
+import edu.gwu.csci6231.device.model.DataModel;
+import edu.gwu.csci6231.device.model.DataModelCamera;
 
+public class CameraProvider extends DeviceProvider implements Runnable {
+	protected boolean running = true;
 
+	public CameraProvider() {
+		models = new HashMap<String, DataModel>();
+		orderByName = new ArrayList<String>();
+
+		for (DataModel model : generateModel()) {
+			models.put(model.getModelName(), model);
+			orderByName.add(model.getModelName());
+		}
+
+		// start running
+		new Thread(this).start();
+	}
+
+	/**
+	 * mock function: generate all DataModel(s)
+	 * 
+	 * @return
+	 */
+	protected List<DataModel> generateModel() {
+		List<DataModel> list = new ArrayList<DataModel>();
+
+		DataModelCamera camera1 = new DataModelCamera("Camera 1", this);
+		camera1.loadSrc("./bike.gif");
+		list.add(camera1);
+
+		DataModelCamera camera2 = new DataModelCamera("Camera 2", this);
+		camera2.loadSrc("./1.gif");
+		list.add(camera2);
+
+		DataModelCamera camera3 = new DataModelCamera("Camera 3", this);
+		camera3.loadSrc("./road2.gif");
+		list.add(camera3);
+		
+		DataModelCamera camera4 = new DataModelCamera("Camera 4", this);
+		camera4.loadSrc("./light.gif");
+		list.add(camera4);
+
+		return list;
+	}
 
 	@Override
 	public boolean takeAction(String modelName, int cmd) {
 		// TODO Auto-generated method stub
 
-		//temperature.updateValue();
-		
-		return false;
+		DataModelCamera model = (DataModelCamera) models.get(modelName);
+
+		switch (cmd) {
+		case (DataModel.CMD_CAMERA_ZOOM_IN):
+			model.zoom(true);
+			break;
+		case (DataModel.CMD_CAMERA_ZOOM_OUT):
+			model.zoom(false);
+			break;
+
+		case (DataModel.CMD_CAMERA_LEFT):
+			model.moveLeftOrRight(true);
+			break;
+
+		case (DataModel.CMD_CAMERA_RIGHT):
+			model.moveLeftOrRight(false);
+			break;
+
+		case (DataModel.CMD_CAMERA_UP):
+			model.moveUpOrDown(true);
+			break;
+		case (DataModel.CMD_CAMERA_DOWN):
+			model.moveUpOrDown(false);
+			break;
+
+		case (DataModel.CMD_CAMERA_REMOVE):
+			
+			model.removeModel();
+			models.remove(modelName);
+			this.orderByName.remove(modelName);
+				
+			
+			break;
+			
+		default:
+			return false;
+		}
+
+		return true;
 	}
 
 	@Override
 	public boolean destory() {
+		this.running = false;
 		return false;
+	}
+
+	@Override
+	public void run() {
+		while (this.running) {
+
+			for (DataModel model : models.values()) {
+				model.updateValue();
+			}
+
+			try {
+				Thread.sleep(DeviceProvider.CAMERA_REFRESH_RATE);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 }

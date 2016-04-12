@@ -7,7 +7,8 @@ import edu.gwu.csci6231.device.model.DataModel;
 
 public abstract class DeviceProvider {
 	
-	public static int REFRESH_RATE = 200;
+	public static int REFRESH_RATE = 1000;
+	public static int CAMERA_REFRESH_RATE = 100;
 
 	protected Map<String,DataModel> models;
 	protected List<String> orderByName;

@@ -5,26 +5,26 @@ import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
+import edu.gwu.csci6231.device.CameraProvider;
 import edu.gwu.csci6231.device.DeviceProvider;
 import edu.gwu.csci6231.device.SensorProvider;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.frame.Console;
 import edu.gwu.csci6231.frame.ConsoleOperator;
-import edu.gwu.csci6231.frame.ConsoleTester;
 
 public class MainFrame {
 
 	
 	public Display display;
 	
-	public DeviceProvider sensorProvider;
+	public DeviceProvider sensorProvider,cameraProvider;
 	
 
 	public MainFrame(Display display) {
 
 		Shell shell = new Shell(display);
 		shell.setText("Mars Ice House 2");
-		shell.setSize(600, 500);
+		shell.setSize(910, 470);
 
 		this.display = display;
 		
@@ -38,10 +38,16 @@ public class MainFrame {
 		
 		for(String name: sensorProvider.getDataModelNames()){
 			DataModel model = sensorProvider.getDataModel(name);
-			consoleOperator.addDataModel(model);
+			consoleOperator.addDataModel(model, Console.TARGET_INDICATOR);
 //			consoleTester.addDataModel(model);
 		}
 		
+		cameraProvider = new CameraProvider();
+		for(String name: cameraProvider.getDataModelNames()){
+			DataModel model = cameraProvider.getDataModel(name);
+			consoleOperator.addDataModel(model, Console.TARGET_CAMERA);
+//			consoleTester.addDataModel(model);
+		}
 		
 		
 		shell.open();
@@ -57,6 +63,7 @@ public class MainFrame {
 		}
 		
 		sensorProvider.destory();
+		cameraProvider.destory();
 		
 		
 	}

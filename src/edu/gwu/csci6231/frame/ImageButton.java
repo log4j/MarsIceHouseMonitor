@@ -62,7 +62,6 @@ public class ImageButton extends Canvas
             @Override
             public void handleEvent(Event arg0)
             {
-                System.out.println("Click");
                 redraw();
             }
         });
@@ -84,7 +83,6 @@ public class ImageButton extends Canvas
 			@Override
 			public void mouseEnter(MouseEvent e) {
 				isHovering = true;
-				System.out.println("Enter");
 			}
 
 			@Override

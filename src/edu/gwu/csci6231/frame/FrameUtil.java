@@ -8,7 +8,10 @@ public class FrameUtil {
 
 	
 	public static Color COLOR_WHITE = new Color(null,255,255,255);
+	public static Color COLOR_BLACK = new Color(null,0,0,0);
 	public static Color COLOR_LIGHT_GRAY = new Color(null,185, 220, 249);
+	
+	public static Color COLOR_CAMERA_BG = new Color(null,32, 72, 103);
 	
 	public static Color[] INDICATOR_BGS = {
 		new Color(null, 241, 69, 61),
@@ -45,4 +48,7 @@ public class FrameUtil {
 	public static Font FONT_VALUE = new Font(null, "Arial", 40, SWT.NONE);
 	public static Font FONT_UNIT = new Font(null, "Arial", 11, SWT.NONE);
 	public static Font FONT_NAME = new Font(null, "Arial", 10, SWT.NONE);
+	public static Font FONT_TIME = new Font(null, "Arial", 9, SWT.NONE);
+	
+	public static String MSG_REMOVE_MODEL = "REMOVE_MODEL";
 }
