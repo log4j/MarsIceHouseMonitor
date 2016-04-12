@@ -48,7 +48,7 @@ public class FrameUtil {
 	public static Font FONT_VALUE = new Font(null, "Arial", 40, SWT.NONE);
 	public static Font FONT_UNIT = new Font(null, "Arial", 11, SWT.NONE);
 	public static Font FONT_NAME = new Font(null, "Arial", 10, SWT.NONE);
-	public static Font FONT_TIME = new Font(null, "Arial", 9, SWT.NONE);
+	public static Font FONT_TIME = new Font(null, "Arial", 10, SWT.NONE);
 	
 	public static String MSG_REMOVE_MODEL = "REMOVE_MODEL";
 }
