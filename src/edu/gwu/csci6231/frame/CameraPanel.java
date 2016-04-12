@@ -9,7 +9,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 
@@ -37,32 +36,39 @@ public class CameraPanel  extends Composite implements Observer {
 		this.model = (DataModelCamera)model;
 	}
 	
+
+	
+	
+
+	
 	private CameraPanel(Composite parent, int mode) {
 		super(parent, mode);
 		
 		
-		this.setBackgroundMode(SWT.INHERIT_FORCE);
+//		this.setBackgroundMode(SWT.INHERIT_FORCE);
 		
 		this.setBackground(FrameUtil.COLOR_CAMERA_BG);
 		
-		videoCanvas = new Canvas(this, SWT.NO_BACKGROUND|SWT.TRANSPARENT);
+		videoCanvas = new Canvas(this, SWT.NONE);
 		videoCanvas.setBounds(PADDING, PADDING, VIDEO_WIDTH, VIDEO_HEIGHT);
+		/*
+		 * draw video content according to current setting (x,y,w,h: zoom)
+		 */
 		videoCanvas.addPaintListener(new PaintListener(){
-
 			@Override
 			public void paintControl(PaintEvent e) {
 				
 //				e.gc.setBackground(FrameUtil.INDICATOR_FGS[0]);
 				
 //				e.gc.fillRectangle(0, 0, 200, 200);
-				ImageData data = model.getImageData();
-				
+				Image image = model.getImage();
 				try {
-					e.gc.drawImage(new Image(getDisplay(),data),model.getX(),model.getY(),model.getW(),model.getH(),0,0,VIDEO_WIDTH,VIDEO_HEIGHT);
+					e.gc.drawImage(image,model.getX(),model.getY(),model.getW(),model.getH(),0,0,VIDEO_WIDTH,VIDEO_HEIGHT);
 				} catch (Exception e1) {
 					System.out.println(model);
 					e1.printStackTrace();
 				}
+				
 				
 				e.gc.setForeground(FrameUtil.COLOR_WHITE);
 				e.gc.setFont(FrameUtil.FONT_TIME);
@@ -84,6 +90,9 @@ public class CameraPanel  extends Composite implements Observer {
 			
 		});
 		
+		/*
+		 * initialize buttons
+		 */
 		btnDown = new ImageButton(this,SWT.NONE);
 		btnDown.setImage(new Image(this.getDisplay(), "./down.png"));
 		btnDown.setBounds(VIDEO_WIDTH+BUTTON_SIZE+5,(int)(BUTTON_SIZE*1.5+10),BUTTON_SIZE,BUTTON_SIZE);
@@ -162,8 +171,6 @@ public class CameraPanel  extends Composite implements Observer {
 				model.takeAction(DataModel.CMD_CAMERA_REMOVE);
 			}
 		});
-		
-		
 		
 	}
 

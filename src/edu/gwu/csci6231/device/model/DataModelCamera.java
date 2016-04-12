@@ -2,12 +2,10 @@ package edu.gwu.csci6231.device.model;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
@@ -28,9 +26,9 @@ public class DataModelCamera extends DataModel {
 
 	protected boolean isRemoved = false;
 	
-	protected Image[] imags;
 	protected ImageLoader loader;
-	protected ImageData[] images;
+	protected ImageData[] imageDatas;
+	protected Image[] images;
 	protected int imageIndex = 0;
 	protected DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -41,11 +39,10 @@ public class DataModelCamera extends DataModel {
 
 	public void loadSrc(String fileName) {
 		loader = new ImageLoader();
-		images = loader.load(fileName);
-		if (images != null && images.length > 0) {
-			int commonIndex = getIndexOfTemplateImage(images);
-			oriW = images[commonIndex].width;
-			oriH = images[commonIndex].height;
+		imageDatas = loader.load(fileName);
+		if (imageDatas != null && imageDatas.length > 0) {
+			oriW = imageDatas[0].width;
+			oriH = imageDatas[0].height;
 
 			zoomMin = Math.max(
 					(double) ((double) CameraPanel.VIDEO_WIDTH / oriW),
@@ -53,47 +50,18 @@ public class DataModelCamera extends DataModel {
 			
 			if(zoom<zoomMin)
 				zoom = zoomMin;
+			
+			zoom = zoomMin * 1.25;
+			
+			x =(int)( (oriW-CameraPanel.VIDEO_WIDTH/zoom)/2);
+			y =(int)( (oriH-CameraPanel.VIDEO_HEIGHT/zoom)/2);
 
 //			 System.out.println(oriW+" "+oriH);
 			this.updateOutput();
 			
-			List<ImageData>reformed = new ArrayList<ImageData>();
-			for(ImageData item:images){
-				if(item.width==oriW && item.height==oriH)
-					reformed.add(item);
-			}
-			
-			images = reformed.toArray(new ImageData[0]);
-			
-//			System.out.println(images.length);
+			convertImageDatasToImages();
 			
 		}
-	}
-
-	private int getIndexOfTemplateImage(ImageData[] imageDatas) {
-		Map<Integer,Integer> data = new HashMap<Integer,Integer>();
-		for(int i=0;i<imageDatas.length;i++){
-			int tmpKey = imageDatas[i].width*10000+imageDatas[i].height;
-			if(data.get(tmpKey)==null)
-				data.put(tmpKey, new Integer(0));
-			data.put(tmpKey, data.get(tmpKey)+1);
-			
-//			System.out.printf("%s size: %d,%d\n",modelName,imageDatas[i].width,imageDatas[i].height);
-		}
-		int mostKey = -1;
-		int sum = 0;
-		for(Integer key:data.keySet()){
-			if(data.get(key)>sum){
-				mostKey = key;
-				sum = data.get(key);
-			}
-		}
-		for(int i=0;i<imageDatas.length;i++){
-			if(imageDatas[i].width*10000+imageDatas[i].height==mostKey){
-				return i;
-			}
-		}
-		return 0;
 	}
 
 	private void updateOutput() {
@@ -135,9 +103,9 @@ public class DataModelCamera extends DataModel {
 
 	@Override
 	public void updateValue() {
-		if (images != null) {
+		if (imageDatas != null) {
 			this.updateOutput();
-			imageIndex = (imageIndex + 1) % images.length;
+			imageIndex = (imageIndex + 1) % imageDatas.length;
 			
 //			System.out.println(imageIndex);
 			this.setChanged();
@@ -147,7 +115,13 @@ public class DataModelCamera extends DataModel {
 	}
 
 	public ImageData getImageData() {
-		if (this.images != null)
+		if (this.imageDatas != null)
+			return this.imageDatas[this.imageIndex];
+		return null;
+	}
+	
+	public Image getImage(){
+		if (this.images !=null)
 			return this.images[this.imageIndex];
 		return null;
 	}
@@ -183,6 +157,61 @@ public class DataModelCamera extends DataModel {
 	}
 
 	public String toString(){
-		return modelName+" images:"+images.length+" x,y:"+x+","+y+" w,h:"+w+","+h;
+		return modelName+" images:"+imageDatas.length+" x,y:"+x+","+y+" w,h:"+w+","+h;
+	}
+	
+	/**
+	 * read GIF and convert ImageData to Image
+	 */
+	protected void convertImageDatasToImages() {
+		images = new Image[imageDatas.length];
+
+		// Step 1: Determine the size of the resulting images.
+		int width = imageDatas[0].width;
+		int height = imageDatas[0].height;
+		
+		System.out.println(width+" "+height);
+
+		// Step 2: Construct each image.
+		int transition = SWT.DM_FILL_BACKGROUND;
+		for (int i = 0; i < imageDatas.length; i++) {
+			ImageData id = imageDatas[i];
+			images[i] = new Image(null, width, height);
+			GC gc = new GC(images[i]);
+
+			// Do the transition from the previous image.
+			switch (transition) {
+			case SWT.DM_FILL_NONE:
+			case SWT.DM_UNSPECIFIED:
+				// Start from last image.
+				gc.drawImage(images[i - 1], 0, 0);
+				break;
+			case SWT.DM_FILL_PREVIOUS:
+				// Start from second last image.
+				gc.drawImage(images[i - 2], 0, 0);
+				break;
+			default:
+				// DM_FILL_BACKGROUND or anything else,
+				// just fill with default background.
+				gc.setBackground(FrameUtil.COLOR_CAMERA_BG);
+				gc.fillRectangle(0, 0, width, height);
+				break;
+			}
+
+			// Draw the current image and clean up.
+			Image img = new Image(null, id);
+			gc.drawImage(img, 0, 0, id.width, id.height, id.x, id.y, id.width,
+					id.height);
+			img.dispose();
+			gc.dispose();
+
+			// Compute the next transition.
+			// Special case: Can't do DM_FILL_PREVIOUS on the
+			// second image since there is no "second last"
+			// image to use.
+			transition = id.disposalMethod;
+			if (i == 0 && transition == SWT.DM_FILL_PREVIOUS)
+				transition = SWT.DM_FILL_NONE;
+		}
 	}
 }

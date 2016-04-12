@@ -32,15 +32,15 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 		List<DataModel> list = new ArrayList<DataModel>();
 
 		DataModelCamera camera1 = new DataModelCamera("Camera 1", this);
-		camera1.loadSrc("./bike.gif");
+		camera1.loadSrc("./rain.gif");
 		list.add(camera1);
 
 		DataModelCamera camera2 = new DataModelCamera("Camera 2", this);
-		camera2.loadSrc("./1.gif");
+		camera2.loadSrc("./metro.gif");
 		list.add(camera2);
 
 		DataModelCamera camera3 = new DataModelCamera("Camera 3", this);
-		camera3.loadSrc("./road2.gif");
+		camera3.loadSrc("./bar.gif");
 		list.add(camera3);
 		
 		DataModelCamera camera4 = new DataModelCamera("Camera 4", this);
