@@ -15,6 +15,8 @@ public class Console extends Composite implements Observer{
 	
 	private List<IndicatorPanel> indicators;
 	
+	private List<CameraPanel> cameras;
+	
 	
 	public Console(Composite parent, int mode) {
 		super(parent, mode);
@@ -23,6 +25,9 @@ public class Console extends Composite implements Observer{
 	
 		
 		indicators = new ArrayList<IndicatorPanel>();
+		
+		CameraPanel c = new CameraPanel(this, SWT.NONE);
+		c.setBounds(IndicatorPanel.WIDTH + 20, 10, 210, 210);
 		
 	}
 	
