@@ -6,7 +6,6 @@ import java.util.Observable;
 import java.util.Observer;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import edu.gwu.csci6231.device.model.DataModel;
@@ -28,7 +27,7 @@ public class Console extends Composite implements Observer{
 	}
 	
 	public void addDataModel(DataModel model){
-		IndicatorPanel indicator = new IndicatorPanel(this,SWT.None,model);
+		IndicatorPanel indicator = new IndicatorPanel(this,SWT.NONE,model);
 		indicators.add(indicator);
 		indicator.setBgColor(FrameUtil.INDICATOR_BGS[indicators.size()%FrameUtil.INDICATOR_BGS.length]);
 		indicator.setFgColor(FrameUtil.INDICATOR_FGS[indicators.size()%FrameUtil.INDICATOR_FGS.length]);
@@ -40,7 +39,7 @@ public class Console extends Composite implements Observer{
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(this.getDisplay().isDisposed())
+		if(this.isDisposed()||this.getDisplay().isDisposed())
 			return;
 		this.getDisplay().asyncExec(new Runnable() {
 			@Override

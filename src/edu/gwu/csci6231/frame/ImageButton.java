@@ -10,13 +10,14 @@ import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 
-public class ImageButton extends Composite
+public class ImageButton extends Canvas
 {
     private Color   textColor;
     private Image   image;
@@ -28,7 +29,7 @@ public class ImageButton extends Composite
     
     public ImageButton(Composite parent, int style)
     {
-        super(parent, SWT.NO_BACKGROUND);
+        super(parent, SWT.NO_BACKGROUND | SWT.TRANSPARENT);
 
         textColor = Display.getDefault().getSystemColor(SWT.COLOR_WHITE);
 
@@ -83,7 +84,7 @@ public class ImageButton extends Composite
 			@Override
 			public void mouseEnter(MouseEvent e) {
 				isHovering = true;
-				
+				System.out.println("Enter");
 			}
 
 			@Override
@@ -137,7 +138,7 @@ public class ImageButton extends Composite
    		this.height = h;
    		super.setSize(w, h);
    		redraw();
-   		pack();
+//   		pack();
    	}
     
     @Override
@@ -146,7 +147,7 @@ public class ImageButton extends Composite
    		this.height = h;
    		super.setBounds(x, y, w, h);
    		redraw();
-   		pack();
+//   		pack();
    	}
 
 	public void setText(String text)
@@ -180,19 +181,21 @@ public class ImageButton extends Composite
         return new Point(overallWidth + 2, overallHeight + 2);
     }
 
-    public static void main2(String[] args)
+    public static void main(String[] args)
     {
         Display display = Display.getDefault();
         Shell shell = new Shell(display);
         shell.setLayout(new GridLayout(1, false));
 
         shell.setSize(30, 30);
-        ImageButton button = new ImageButton(shell, SWT.NONE);
+        ImageButton button = new ImageButton(shell, SWT.NO_BACKGROUND|SWT.TRANSPARENT);
+        
+        
         button.setImage(new Image(display, "./fix_icon.png"));
         button.setText("");
 //        button.setSize(30,30);
         button.setBounds(0, 0, 30, 30);
-
+        button.setBackground(shell.getBackground());
         shell.pack();
         shell.open();
 

@@ -111,6 +111,37 @@ public abstract class DataModel extends Observable{
 	public double getMaxSafeValue() {
 		return maxSafeValue;
 	}
+
+
+	public void setShouldAlarm(boolean shouldAlarm) {
+		this.shouldAlarm = shouldAlarm;
+	}
+
+	public boolean isAlarmEnabled(){
+		return this.shouldAlarm;
+	}
+
+	public void setMinSafeValue(double minSafeValue) {
+		this.minSafeValue = minSafeValue;
+	}
+
+
+	public void setMaxSafeValue(double maxSafeValue) {
+		this.maxSafeValue = maxSafeValue;
+	}
+
+	
+
+	public void setVibeRate(double vibeRate) {
+		this.vibeRate = vibeRate;
+	}
+
+
+	public void setHowManyPercentageToAdd(double howManyPercentageToAdd) {
+		this.howManyPercentageToAdd = howManyPercentageToAdd;
+	}
+	
+	
 	
 //	protected 
 }

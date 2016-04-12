@@ -16,151 +16,169 @@ import org.eclipse.swt.widgets.Label;
 
 import edu.gwu.csci6231.device.model.DataModel;
 
-public class IndicatorPanel extends Composite implements Observer{
+public class IndicatorPanel extends Composite implements Observer {
 
 	public static int WIDTH = 220;
 	public static int HEIGHT = 90;
 	public static int PADDING = 5;
 	protected static int GRAPH_WIDTH = 2;
-	
+
 	protected int[] graphData;
 	protected int graphIndex = 0;
-	
+
 	protected DataModel model = null;
 
 	protected Color bgColor = FrameUtil.INDICATOR_BGS[0];
 	protected Color fgColor = FrameUtil.INDICATOR_FGS[0];
 	protected Color subTitleColor = FrameUtil.INDICATOR_TITLECOLORS[0];
-	
-	protected Label nameLabel,valueLabel,alarmLabel,unitLabel;
+
+	protected Label nameLabel, valueLabel, alarmLabel, unitLabel;
 	protected ImageButton fixButton;
-	
+
 	protected Canvas alarmCanvas;
-	
+
 	protected Runnable runnable = null;
 	protected int colorTimming = 0;
-	
+
 	protected IndicatorPanel(Composite parent, int mode) {
 		super(parent, mode);
-		
+
 		this.setLayout(null);
-//		this.setSize(200, 120);
-		
+		// this.setSize(200, 120);
+
 		this.initGraphData();
-		
+
 		this.setBackgroundMode(SWT.INHERIT_FORCE);
-		
-		this.setBackground(this.bgColor);
-		
-		nameLabel = new Label(this,SWT.NONE);
+
+		// this.setBackground(this.bgColor);
+
+		nameLabel = new Label(this, SWT.NONE);
 		nameLabel.setForeground(subTitleColor);
-//		nameLabel.setFont(FrameUtil.FONT_VALUE);
-		nameLabel.setBounds(10, 60, 150, 30);
-	
-		
-		
-		valueLabel = new Label(this,SWT.NONE);
+		// nameLabel.setBa
+		// nameLabel.setFont(FrameUtil.FONT_VALUE);
+		//nameLabel.setBounds(10, 60, 150, 20);
+
+		valueLabel = new Label(this, SWT.NO_BACKGROUND);
 		valueLabel.setForeground(FrameUtil.COLOR_WHITE);
 		valueLabel.setFont(FrameUtil.FONT_VALUE);
-		valueLabel.setBounds(10, 10, 150, 50);
-		
-		unitLabel = new Label(this,SWT.NONE);
+		// valueLabel.setBounds(10, 10, 140, 50);
+
+		unitLabel = new Label(this, SWT.NO_BACKGROUND | SWT.TRANSPARENT);
 		unitLabel.setForeground(FrameUtil.COLOR_WHITE);
-		unitLabel.setBounds(130, 10, 20, 20);
-		
-		fixButton = new ImageButton(this,SWT.PUSH);
-		alarmLabel = new Label(this,SWT.NONE);
-		alarmLabel.setForeground(new Color(null,255,0,0));
-//		fixButton.setText("Send Robot");
-		fixButton.setImage(new Image(this.getDisplay(),"./fix_icon.png"));
-		fixButton.setSize(30,30);
+		// unitLabel.setBounds(130, 10, 20, 20);
+
+		fixButton = new ImageButton(this, SWT.PUSH);
+		alarmLabel = new Label(this, SWT.NONE);
+		alarmLabel.setForeground(new Color(null, 255, 0, 0));
+		// fixButton.setText("Send Robot");
+		fixButton.setImage(new Image(this.getDisplay(), "./fix_icon.png"));
+		fixButton.setSize(30, 30);
 		fixButton.setBounds(170, 30, 30, 30);
 		fixButton.setEnabled(false);
-		
-//		fixButton.setBackgroundImage(new Image(this.getDisplay(),"./fix_icon.png"));
-		fixButton.addMouseListener(new MouseAdapter(){
+
+		// fixButton.setBackgroundImage(new
+		// Image(this.getDisplay(),"./fix_icon.png"));
+		fixButton.addMouseListener(new MouseAdapter() {
 
 			@Override
 			public void mouseDoubleClick(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseDown(MouseEvent arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 
 			@Override
 			public void mouseUp(MouseEvent e) {
 				System.out.println("Fix clicked");
-				if(model!=null){
+				if (model != null) {
 					model.sendRobotToFix();
 				}
 			}
-			
+
 		});
-		
-		
-		this.addPaintListener(new PaintListener(){
+
+		this.addPaintListener(new PaintListener() {
 
 			@Override
 			public void paintControl(PaintEvent e) {
-//				e.gc.drawLine(0, 0, 100, 100);
-//				e.gc.drawString(model.getDataString(), 0, 0);
-				
-				e.gc.setForeground(fgColor);
+				// e.gc.drawLine(0, 0, 100, 100);
+				// e.gc.drawString(model.getDataString(), 0, 0);
+
 				e.gc.setBackground(fgColor);
-				for(int i=0;i<graphData.length;i++){
-					int height = graphData[(i+graphIndex)%graphData.length];
-					e.gc.fillRectangle(i*GRAPH_WIDTH, HEIGHT-PADDING-height, GRAPH_WIDTH, height);
+				for (int i = 0; i < graphData.length; i++) {
+					int height = graphData[(i + graphIndex) % graphData.length];
+					e.gc.fillRectangle(i * GRAPH_WIDTH, HEIGHT - PADDING
+							- height, GRAPH_WIDTH, height);
 				}
+
+				// e.gc.setBackground(null);
+				e.gc.setForeground(FrameUtil.COLOR_WHITE);
+				e.gc.setFont(FrameUtil.FONT_VALUE);
+				e.gc.drawString(model.getDataString(), 10, 10, true);
+
+				e.gc.setFont(FrameUtil.FONT_UNIT);
+				e.gc.drawString(model.getUnit(), 140, 10, true);
+				
+				e.gc.setFont(FrameUtil.FONT_NAME);
+				e.gc.setForeground(subTitleColor);
+				e.gc.drawString(model.getModelName(), 10, 60, true);
 			}
 		});
-		
+
 		
 		alarmCanvas = new Canvas(this, SWT.NONE);
-		alarmCanvas.setBounds(0, HEIGHT-PADDING, WIDTH, PADDING);
-//		alarmCanvas.setBackground(new Color(null,255,1,1));
-		alarmCanvas.addPaintListener(new PaintListener(){
+		alarmCanvas.setBounds(0, HEIGHT - PADDING, WIDTH, PADDING);
+		// alarmCanvas.setBackground(new Color(null,255,1,1));
+		alarmCanvas.addPaintListener(new PaintListener() {
 			@Override
 			public void paintControl(PaintEvent e) {
-				if(model.isAlarming()){
-					e.gc.setBackground(FrameUtil.RED_FLASHING[colorTimming%(FrameUtil.RED_FLASHING.length)]);
-					e.gc.fillRectangle(0,0,alarmCanvas.getSize().x,alarmCanvas.getSize().y);
-//					System.out.println(alarmCanvas.getBounds());
-//					e.gc.drawLine(0, 0, 10, 10);
+				if (model.isAlarming()) {
+					e.gc.setBackground(FrameUtil.RED_FLASHING[colorTimming
+							% (FrameUtil.RED_FLASHING.length)]);
+					e.gc.fillRectangle(0, 0, alarmCanvas.getSize().x,
+							alarmCanvas.getSize().y);
+					// System.out.println(alarmCanvas.getBounds());
+					// e.gc.drawLine(0, 0, 10, 10);
 				}
 			}
 		});
 	}
-	
+
 	private void initGraphData() {
-		this.graphData = new int[WIDTH/GRAPH_WIDTH];
-	}
-	
-	private void insertNewGraphData(double value){
-		this.graphData[this.graphIndex] = (int)((HEIGHT-2*PADDING) * (value-model.getMinSafeValue()) / (model.getMaxSafeValue()-model.getMinSafeValue()));
-		this.graphIndex = (this.graphIndex+1)%this.graphData.length;
+		this.graphData = new int[WIDTH / GRAPH_WIDTH];
 	}
 
-	public IndicatorPanel(Composite parent, int mode, DataModel model){
-		this(parent,mode);
+	private void insertNewGraphData(double value) {
+		this.graphData[this.graphIndex] = (int) ((HEIGHT - 2 * PADDING)
+				* (value - model.getMinSafeValue()) / (model.getMaxSafeValue() - model
+				.getMinSafeValue()));
+		this.graphIndex = (this.graphIndex + 1) % this.graphData.length;
+	}
+
+	public IndicatorPanel(Composite parent, int mode, DataModel model) {
+		this(parent, mode);
 		this.model = model;
+		if(!this.model.isAlarmEnabled()){
+			this.alarmCanvas.setVisible(false);
+			this.fixButton.setVisible(false);
+		}
 		this.update();
 	}
-	
-	
-	private void showAlarm(){
-		
-		if(this.runnable!=null){
+
+	private void showAlarm() {
+
+		if (this.runnable != null) {
 			return;
 		}
 		// Set up the timer for the animation
-		this.runnable = new Runnable(){
-			public void run(){
-//				System.out.println("haha");
+		this.runnable = new Runnable() {
+			public void run() {
+				// System.out.println("haha");
 				getDisplay().timerExec(100, this);
 				colorTimming = (colorTimming + 1) % 50;
 				alarmCanvas.redraw();
@@ -168,46 +186,43 @@ public class IndicatorPanel extends Composite implements Observer{
 		};
 		getDisplay().timerExec(10, runnable);
 	}
-	
-	private void endAlarm(){
-		if(this.runnable!=null){
+
+	private void endAlarm() {
+		if (this.runnable != null) {
 			getDisplay().timerExec(-1, runnable);
 			runnable = null;
 		}
 	}
-	
-	
-	
-	public void update(){
-		if(model!=null){
+
+	public void update() {
+		if (model != null) {
 			nameLabel.setText(model.getModelName());
 			valueLabel.setText(model.getDataString());
-			alarmLabel.setText(model.isAlarming()?"Alarm!!!":"");
+			alarmLabel.setText(model.isAlarming() ? "Alarm!!!" : "");
 			unitLabel.setText(model.getUnit());
-			
-			if(model.isAlarming()){
+
+			if (model.isAlarming()) {
 				showAlarm();
-			}else{
+			} else {
 				endAlarm();
 			}
-			
+
 			insertNewGraphData(model.getData());
-			
+
 			fixButton.setEnabled(model.isAlarming());
-			
-		}else{
+
+		} else {
 			nameLabel.setText("NA");
 		}
-//		System.out.println(model.getData());
-		
-		
-//		this.pack();
+		// System.out.println(model.getData());
+
+		// this.pack();
 		this.redraw();
 	}
 
 	@Override
 	public void update(Observable o, Object arg) {
-		if(this.getDisplay().isDisposed())
+		if (this.isDisposed()||this.getDisplay().isDisposed())
 			return;
 		this.getDisplay().asyncExec(new Runnable() {
 			@Override
@@ -225,8 +240,8 @@ public class IndicatorPanel extends Composite implements Observer{
 	public void setFgColor(Color fgColor) {
 		this.fgColor = fgColor;
 	}
-	
-	public void setSubTitleColor(Color color){
+
+	public void setSubTitleColor(Color color) {
 		this.subTitleColor = color;
 		nameLabel.setForeground(subTitleColor);
 	}
