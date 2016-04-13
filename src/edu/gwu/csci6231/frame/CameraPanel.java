@@ -27,6 +27,8 @@ public class CameraPanel  extends Composite implements Observer {
 	public static final int MENU_WIDTH = 115;
 	public static final int MENU_HEIGHT = 200;
 	
+	public static final int CANVAS_TIME_X = 80;
+	
 	protected Canvas videoCanvas;
 	
 	protected DataModelCamera model;
@@ -72,7 +74,6 @@ public class CameraPanel  extends Composite implements Observer {
 				
 				e.gc.fillRectangle(0, 0, VIDEO_WIDTH, VIDEO_HEIGHT);
 				
-				
 				if(model!=null){
 					Image image = model.getImage();
 					try {
@@ -85,17 +86,18 @@ public class CameraPanel  extends Composite implements Observer {
 					e.gc.setForeground(FrameUtil.COLOR_WHITE);
 					e.gc.setFont(FrameUtil.FONT_TIME);
 					e.gc.drawString(model.getModelName(), 1, 1, true);
-					e.gc.drawString(model.getTime(), 101, 1, true);
+					e.gc.drawString(model.getTime(), CANVAS_TIME_X+1, 1, true);
 					e.gc.drawString(model.getModelName(), -1, -1, true);
-					e.gc.drawString(model.getTime(), 101, -1, true);
+					e.gc.drawString(model.getTime(), CANVAS_TIME_X+1, -1, true);
 					e.gc.drawString(model.getModelName(), -1, 1, true);
-					e.gc.drawString(model.getTime(), 99, -1, true);
+					e.gc.drawString(model.getTime(), CANVAS_TIME_X-1, -1, true);
 					e.gc.drawString(model.getModelName(), 1, -1, true);
-					e.gc.drawString(model.getTime(), 99, 1, true);
+					e.gc.drawString(model.getTime(), CANVAS_TIME_X-1, 1, true);
 					e.gc.setForeground(FrameUtil.COLOR_BLACK);
 					e.gc.setFont(FrameUtil.FONT_TIME);
 					e.gc.drawString(model.getModelName(), 0, 0, true);
-					e.gc.drawString(model.getTime(), 100, 0, true);
+					e.gc.drawString(model.getTime(), CANVAS_TIME_X, 0, true);
+					
 				}
 				
 				
@@ -215,6 +217,7 @@ public class CameraPanel  extends Composite implements Observer {
 				if(model==null || model.isRemoved())
 					return;
 				redraw();
+				videoCanvas.redraw();
 			}
 		});
 	}
