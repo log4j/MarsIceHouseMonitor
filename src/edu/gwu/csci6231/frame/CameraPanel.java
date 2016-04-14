@@ -245,6 +245,8 @@ public class CameraPanel extends Composite implements Observer {
 					messageBox.setText("Warning");
 					messageBox.setMessage("No camera under this link!");
 					messageBox.open();
+					
+//					MessageDialog.openWarning(btnAdd.getShell(),"","");
 				}
 			}
 		});
