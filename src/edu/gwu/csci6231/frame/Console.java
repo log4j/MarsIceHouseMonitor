@@ -59,8 +59,9 @@ public class Console extends Composite implements Observer{
 				for(int i=0;i<cameras.size();i++){
 					if(cameras.get(i).hasModel((DataModel)o)){
 						//remove that model
-						cameras.get(i).dispose();
-						cameras.remove(i);
+//						cameras.get(i).dispose();
+//						cameras.remove(i);
+						cameras.get(i).removeModel();
 					}
 				}
 			}

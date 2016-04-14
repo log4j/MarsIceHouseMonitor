@@ -23,7 +23,14 @@ public abstract class DeviceProvider {
 		return null;
 	}
 
-	public abstract boolean takeAction (String modelName, int cmd);
+	public abstract boolean takeAction (String modelName, int cmd,String...paras);
 	
 	public abstract boolean destory ();
+
+	public DataModel getLastModel() {
+		if(orderByName!=null && orderByName.size()>0){
+			return this.models.get(this.orderByName.get(this.orderByName.size()-1));
+		}
+		return null;
+	}
 }

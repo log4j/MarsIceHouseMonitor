@@ -51,4 +51,5 @@ public class FrameUtil {
 	public static Font FONT_TIME = new Font(null, "Arial", 10, SWT.NONE);
 	
 	public static String MSG_REMOVE_MODEL = "REMOVE_MODEL";
+	public static String MSG_ADD_EXTRA_MODEL = "ADD_EXTRA_MODEL";
 }

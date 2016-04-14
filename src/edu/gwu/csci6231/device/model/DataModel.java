@@ -16,6 +16,8 @@ public abstract class DataModel extends Observable{
 	public static final int CMD_CAMERA_ZOOM_IN = 0x15;
 	public static final int CMD_CAMERA_ZOOM_OUT = 0x16;
 	public static final int CMD_CAMERA_REMOVE = 0x17;
+	public static final int CMD_CAMERA_ADD = 0x18;
+	public static final int CMD_CAMERA_ADD_EXTRA = 0x19;
 	
 	protected double data = 0;
 	protected String modelName;
@@ -150,10 +152,15 @@ public abstract class DataModel extends Observable{
 	 * @param cmd
 	 * @return
 	 */
-	public boolean takeAction(int cmd){
+	public boolean takeAction(int cmd, String...paras){
 		if(this.provider==null)
 			return false;
-		return this.provider.takeAction(this.modelName, cmd);
+		return this.provider.takeAction(this.modelName, cmd, paras);
+	}
+
+
+	public DeviceProvider getProvider() {
+		return provider;
 	}
 	
 	

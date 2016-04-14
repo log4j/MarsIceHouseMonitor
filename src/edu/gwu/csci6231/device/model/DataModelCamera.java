@@ -1,5 +1,6 @@
 package edu.gwu.csci6231.device.model;
 
+import java.io.File;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -25,7 +26,7 @@ public class DataModelCamera extends DataModel {
 	protected int oriW, oriH;
 
 	protected boolean isRemoved = false;
-	
+
 	protected ImageLoader loader;
 	protected ImageData[] imageDatas;
 	protected Image[] images;
@@ -37,8 +38,12 @@ public class DataModelCamera extends DataModel {
 		this.provider = provider;
 	}
 
-	public void loadSrc(String fileName) {
+	public boolean loadSrc(String fileName) {
 		loader = new ImageLoader();
+		File file = new File(fileName);
+		if (!file.exists())
+			return false;
+
 		imageDatas = loader.load(fileName);
 		if (imageDatas != null && imageDatas.length > 0) {
 			oriW = imageDatas[0].width;
@@ -47,21 +52,26 @@ public class DataModelCamera extends DataModel {
 			zoomMin = Math.max(
 					(double) ((double) CameraPanel.VIDEO_WIDTH / oriW),
 					(double) ((double) CameraPanel.VIDEO_HEIGHT / oriH));
-			
-			if(zoom<zoomMin)
-				zoom = zoomMin;
-			
-			zoom = zoomMin * 1.25;
-			
-			x =(int)( (oriW-CameraPanel.VIDEO_WIDTH/zoom)/2);
-			y =(int)( (oriH-CameraPanel.VIDEO_HEIGHT/zoom)/2);
 
-//			 System.out.println(oriW+" "+oriH);
+			if (zoom < zoomMin)
+				zoom = zoomMin;
+
+			zoom = zoomMin * 1.25;
+
+			x = (int) ((oriW - CameraPanel.VIDEO_WIDTH / zoom) / 2);
+			y = (int) ((oriH - CameraPanel.VIDEO_HEIGHT / zoom) / 2);
+
+			// System.out.println(oriW+" "+oriH);
 			this.updateOutput();
-			
+
 			convertImageDatasToImages();
-			
+
 		}
+
+		this.isRemoved = false;
+		this.updateValue();
+
+		return true;
 	}
 
 	private void updateOutput() {
@@ -75,8 +85,9 @@ public class DataModelCamera extends DataModel {
 			x = 0;
 		if (y < 0)
 			y = 0;
-//
-//		System.out.printf("%d %d %d %d %d %d %f\n", x, y, w, h, oriW, oriH,zoomMin);
+		//
+		// System.out.printf("%d %d %d %d %d %d %f\n", x, y, w, h, oriW,
+		// oriH,zoomMin);
 	}
 
 	public void zoom(boolean in) {
@@ -103,11 +114,11 @@ public class DataModelCamera extends DataModel {
 
 	@Override
 	public void updateValue() {
-		if (imageDatas != null) {
+		if (!this.isRemoved && imageDatas != null) {
 			this.updateOutput();
 			imageIndex = (imageIndex + 1) % imageDatas.length;
-			
-//			System.out.println(imageIndex);
+
+			// System.out.println(imageIndex);
 			this.setChanged();
 			this.notifyObservers();
 		}
@@ -119,9 +130,9 @@ public class DataModelCamera extends DataModel {
 			return this.imageDatas[this.imageIndex];
 		return null;
 	}
-	
-	public Image getImage(){
-		if (this.images !=null)
+
+	public Image getImage() {
+		if (this.images != null)
 			return this.images[this.imageIndex];
 		return null;
 	}
@@ -145,21 +156,29 @@ public class DataModelCamera extends DataModel {
 	public int getH() {
 		return h;
 	}
-	
-	public void removeModel () {
+
+	public void removeModel() {
 		this.isRemoved = true;
 		this.setChanged();
 		this.notifyObservers(FrameUtil.MSG_REMOVE_MODEL);
 	}
 	
-	public boolean isRemoved(){
+	public void addExtraModel() {
+		this.setChanged();
+		this.notifyObservers(FrameUtil.MSG_ADD_EXTRA_MODEL);
+		
+		System.out.println("Try to notify:"+FrameUtil.MSG_ADD_EXTRA_MODEL);
+	}
+
+	public boolean isRemoved() {
 		return this.isRemoved;
 	}
 
-	public String toString(){
-		return modelName+" images:"+imageDatas.length+" x,y:"+x+","+y+" w,h:"+w+","+h;
+	public String toString() {
+		return modelName + " images:" + imageDatas.length + " x,y:" + x + ","
+				+ y + " w,h:" + w + "," + h;
 	}
-	
+
 	/**
 	 * read GIF and convert ImageData to Image
 	 */
@@ -169,8 +188,8 @@ public class DataModelCamera extends DataModel {
 		// Step 1: Determine the size of the resulting images.
 		int width = imageDatas[0].width;
 		int height = imageDatas[0].height;
-		
-		System.out.println(width+" "+height);
+
+		System.out.println(width + " " + height);
 
 		// Step 2: Construct each image.
 		int transition = SWT.DM_FILL_BACKGROUND;

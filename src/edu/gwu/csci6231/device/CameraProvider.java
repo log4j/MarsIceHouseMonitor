@@ -42,16 +42,16 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 		DataModelCamera camera3 = new DataModelCamera("Camera 3", this);
 		camera3.loadSrc("./bar.gif");
 		list.add(camera3);
-		
-		DataModelCamera camera4 = new DataModelCamera("Camera 4", this);
-		camera4.loadSrc("./light.gif");
-		list.add(camera4);
+//
+//		DataModelCamera camera4 = new DataModelCamera("Camera 4", this);
+//		camera4.loadSrc("./light.gif");
+//		list.add(camera4);
 
 		return list;
 	}
 
 	@Override
-	public boolean takeAction(String modelName, int cmd) {
+	public boolean takeAction(String modelName, int cmd, String... paras) {
 		// TODO Auto-generated method stub
 
 		DataModelCamera model = (DataModelCamera) models.get(modelName);
@@ -80,14 +80,27 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 			break;
 
 		case (DataModel.CMD_CAMERA_REMOVE):
-			
+
 			model.removeModel();
-			models.remove(modelName);
-			this.orderByName.remove(modelName);
-				
+			// models.remove(modelName);
+			// this.orderByName.remove(modelName);
+
+			break;
+
+		case (DataModel.CMD_CAMERA_ADD):
+			return model.loadSrc(paras[0]);
+
+		case (DataModel.CMD_CAMERA_ADD_EXTRA):
+			
+			DataModelCamera camera = new DataModelCamera("Camera "+(1+this.orderByName.size()), this);
+			camera.loadSrc(paras[0]);
+			this.models.put(camera.getModelName(), camera);
+			this.orderByName.add(camera.getModelName());
+			
+			model.addExtraModel();
 			
 			break;
-			
+		
 		default:
 			return false;
 		}

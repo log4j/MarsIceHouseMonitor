@@ -66,7 +66,7 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 
 
 	@Override
-	public boolean takeAction(String modelName, int cmd) {
+	public boolean takeAction(String modelName, int cmd,	String...paras) {
 		DataModel model = this.models.get(modelName);
 		if(model!=null){
 			model.setToBestValue();
