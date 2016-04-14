@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import edu.gwu.csci6231.database.SimulatorEvent;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.device.model.DataModelHumidity;
 import edu.gwu.csci6231.device.model.DataModelOxygen;
@@ -79,7 +80,12 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 
 
 
-
+	public boolean runSimulator(SimulatorEvent event){
+		
+		System.out.println(event);
+		
+		return false;
+	}
 
 
 

@@ -2,7 +2,6 @@ package edu.gwu.csci6231;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
-import org.eclipse.swt.widgets.Dialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
@@ -76,7 +75,7 @@ public class MainFrame {
 			public void handleEvent(Event e) {
 				System.out.println("hahah");
 				
-				DebugEventDialog debugger = new DebugEventDialog(shell,SWT.None);
+				DebugEventDialog debugger = new DebugEventDialog(shell,SWT.None, sensorProvider);
 				debugger.open();
 			}
         	
