@@ -6,7 +6,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -22,6 +21,10 @@ import edu.gwu.csci6231.device.SensorProvider;
 
 public class DebugEventDialog extends Dialog {
 
+	public static int INDICATOR_WIDTH = 150;
+	public static int LINE_HEIGHT = 30;
+	public static int NUMBER_WIDTH = 70;
+	public static int BUTTON_WIDTH = 70;
 	
 	private DeviceProvider provider;
 	private Shell shell;
@@ -32,9 +35,13 @@ public class DebugEventDialog extends Dialog {
 	private List<Text> times;
 	private List<Button> removeBtns;
 	
+	private Label warning;
+	
 	private Button addEventItemBtn,runSimulatorBtn;
 	
 	private Composite tables;
+	
+	protected Runnable runnable = null;
 
 	public DebugEventDialog(Shell parent, int mode, DeviceProvider provider) {
 		super(parent, mode);
@@ -69,38 +76,49 @@ public class DebugEventDialog extends Dialog {
  
 	}
  
+	
+	
 	private void draw() {
  
 		if(shell==null)
 			return;
 		
-		shell.setLayout(new GridLayout(1, true));
+		shell.setLayout(null);
+		shell.setSize(410, 400);
+//		shell.setBounds(10, 10, 400, 500);
 		
-		tables = new Composite(shell, SWT.HORIZONTAL);
-		tables.setLayout(new GridLayout(4, true));
-		
+		tables = new Composite(shell, SWT.NONE);
+		tables.setLayout(null);
+		tables.setBounds(5, 5, 400, 200);
 //		Composite labels = new Composite(shell, SWT.HORIZONTAL);
 //		labels.setLayout(new GridLayout(4, true));
 		
 		Label titleIndicator = new Label(tables, SWT.HORIZONTAL | SWT.SHADOW_OUT);
 		titleIndicator.setText("Indicator");
+		titleIndicator.setBounds(0, 0, INDICATOR_WIDTH, LINE_HEIGHT);
 		
 		Label titleSetValue = new Label(tables, SWT.HORIZONTAL | SWT.SHADOW_OUT);
 		titleSetValue.setText("Set Value");
+		titleSetValue.setBounds(INDICATOR_WIDTH+5, 0, NUMBER_WIDTH, LINE_HEIGHT);
 		
 		Label titleWhen = new Label(tables, SWT.HORIZONTAL | SWT.SHADOW_OUT);
 		titleWhen.setText("When");
+		titleWhen.setBounds(INDICATOR_WIDTH+NUMBER_WIDTH+10, 0, NUMBER_WIDTH, LINE_HEIGHT);
 		
 		Label titleRemove = new Label(tables, SWT.HORIZONTAL | SWT.SHADOW_OUT);
 		titleRemove.setText("  ");
  
 		
+		warning = new Label(tables, SWT.NONE);
+		warning.setForeground(FrameUtil.COLOR_RED);
+		warning.setText("Form not valid!");
+		warning.setVisible(false);
 		
 		for(SimulatorEvent.EventInfo eventInfo:event.getEvents()){
 			this.addOneRecord(eventInfo);
 		}
 		
-		addEventItemBtn = new Button(shell,SWT.NONE);
+		addEventItemBtn = new Button(tables,SWT.NONE);
 		addEventItemBtn.setText("Insert Event");
 		addEventItemBtn.addMouseListener(new MouseAdapter(){
 			@Override
@@ -108,19 +126,46 @@ public class DebugEventDialog extends Dialog {
 				event.addEvent(SimulatorEvent.EventInfo.create());
 				addOneRecord(event.getLastEvent());
 				tables.redraw();
+				repackLocation();
 				shell.pack();
 				System.out.println("Insert Event");
 			}
 		});
 		
-		runSimulatorBtn = new Button(shell,SWT.NONE);
+		runSimulatorBtn = new Button(tables,SWT.NONE);
 		runSimulatorBtn.setText("Run!!!!!");
 		runSimulatorBtn.addMouseListener(new MouseAdapter(){
 			@Override
 			public void mouseUp(MouseEvent e) {
-				((SensorProvider)provider).runSimulator(getEvent());
+				SimulatorEvent event = getEvent();
+				if(event==null){
+					warning.setVisible(true);
+				}else{
+					warning.setVisible(false);
+//					((SensorProvider)provider).runSimulator(getEvent());
+					runSimulator();
+				}
+				
 			}
 		});
+		
+		repackLocation();
+	}
+	
+	private void repackLocation(){
+		for(int i=0;i<indicators.size();i++){
+			indicators.get(i).setBounds(0, (LINE_HEIGHT+5)*(i+1), INDICATOR_WIDTH, LINE_HEIGHT);
+			values.get(i).setBounds(INDICATOR_WIDTH+5, (LINE_HEIGHT+5)*(i+1), NUMBER_WIDTH, LINE_HEIGHT-5);
+			times.get(i).setBounds(INDICATOR_WIDTH+NUMBER_WIDTH+10, (LINE_HEIGHT+5)*(i+1), NUMBER_WIDTH, LINE_HEIGHT-5);
+			removeBtns.get(i).setBounds(INDICATOR_WIDTH+NUMBER_WIDTH*2+15, (LINE_HEIGHT+5)*(i+1), BUTTON_WIDTH, LINE_HEIGHT-5);
+		}
+		//tables.setBounds(5, 5, 400, (LINE_HEIGHT+5)*(indicators.size()+1));
+		addEventItemBtn.setBounds(INDICATOR_WIDTH+NUMBER_WIDTH*2, (LINE_HEIGHT+5)*(indicators.size()+1), BUTTON_WIDTH+15, LINE_HEIGHT-5);
+		warning.setBounds(0, (LINE_HEIGHT+5)*(indicators.size()+1), INDICATOR_WIDTH, LINE_HEIGHT-5);
+		
+		runSimulatorBtn.setBounds(0, (LINE_HEIGHT+5)*(indicators.size()+2), INDICATOR_WIDTH+NUMBER_WIDTH*2+BUTTON_WIDTH+15, LINE_HEIGHT-5);
+		
+		tables.setBounds(10, 10, INDICATOR_WIDTH+NUMBER_WIDTH*3+25, (LINE_HEIGHT+5)*(indicators.size()+3));
 	}
 
 	private void addOneRecord(SimulatorEvent.EventInfo eventInfo){
@@ -146,6 +191,7 @@ public class DebugEventDialog extends Dialog {
 					values.remove(index).dispose();
 					times.remove(index).dispose();
 					removeBtns.remove(index).dispose();
+					repackLocation();
 					shell.pack();
 				}
 			}
@@ -160,11 +206,15 @@ public class DebugEventDialog extends Dialog {
 	public SimulatorEvent getEvent(){
 		SimulatorEvent event = new SimulatorEvent();
 		for(int i=0;i<indicators.size();i++){
+			if(indicators.get(i).getText().equals("")){
+				return null;
+			}
 			double value = 0;
 			try {
 				value = Double.parseDouble(values.get(i).getText());
 			} catch (NumberFormatException e) {
 //				e.printStackTrace();
+				return null;
 			}
 			int time = 0;
 			try {
@@ -180,5 +230,19 @@ public class DebugEventDialog extends Dialog {
 		}
 		
 		return event;
+	}
+	
+	protected void runSimulator(){
+		this.runnable = new Runnable() {
+			public void run() {
+				// System.out.println("haha");
+				getParent().getDisplay().timerExec(1000, this);
+//				colorTimming = (colorTimming + 1) % 50;
+//				alarmCanvas.redraw();
+				
+				System.out.println("EEE");
+			}
+		};
+		getParent().getDisplay().timerExec(10, runnable);
 	}
 }

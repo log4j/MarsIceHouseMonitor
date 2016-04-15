@@ -9,6 +9,7 @@ public class FrameUtil {
 	
 	public static Color COLOR_WHITE = new Color(null,255,255,255);
 	public static Color COLOR_BLACK = new Color(null,0,0,0);
+	public static Color COLOR_RED = new Color(null,255,0,0);
 	public static Color COLOR_LIGHT_GRAY = new Color(null,185, 220, 249);
 	
 	public static Color COLOR_CAMERA_BG = new Color(null,32, 72, 103);

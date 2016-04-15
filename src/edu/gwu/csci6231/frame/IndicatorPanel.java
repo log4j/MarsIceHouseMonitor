@@ -79,27 +79,12 @@ public class IndicatorPanel extends Composite implements Observer {
 		// fixButton.setBackgroundImage(new
 		// Image(this.getDisplay(),"./fix_icon.png"));
 		fixButton.addMouseListener(new MouseAdapter() {
-
-			@Override
-			public void mouseDoubleClick(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
-			@Override
-			public void mouseDown(MouseEvent arg0) {
-				// TODO Auto-generated method stub
-
-			}
-
 			@Override
 			public void mouseUp(MouseEvent e) {
-				System.out.println("Fix clicked");
 				if (model != null) {
 					model.sendRobotToFix();
 				}
 			}
-
 		});
 
 		this.addPaintListener(new PaintListener() {

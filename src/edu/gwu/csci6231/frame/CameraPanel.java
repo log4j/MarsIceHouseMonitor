@@ -10,10 +10,13 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import edu.gwu.csci6231.device.model.DataModel;
@@ -161,13 +164,14 @@ public class CameraPanel extends Composite implements Observer {
 		btnAddExtra.setText("Add An Extra Camera");
 		btnAddExtra.setBounds(110, 50, 160, 30);
 
-		linkText = new Text(settingButtons, SWT.SINGLE);
+		linkText = new Text(settingButtons, SWT.SINGLE | SWT.BORDER);
 		linkText.setBounds(20, 20, VIDEO_WIDTH + MENU_WIDTH - 35, 20);
 
-		linkExamples = new Text(settingButtons, SWT.MULTI);
+		linkExamples = new Text(settingButtons, SWT.MULTI | SWT.BORDER);
 		linkExamples.setBounds(20, 100, VIDEO_WIDTH + MENU_WIDTH - 35, 80);
 		linkExamples
 				.setText("//Examples:\nbike, bar, metro, rain, waterfall, light");
+		linkExamples.setEditable(false);
 
 		this.addListener();
 	}
@@ -234,16 +238,20 @@ public class CameraPanel extends Composite implements Observer {
 			}
 		});
 		
+		  
+		
 		btnAddExtra.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if (!model.takeAction(DataModel.CMD_CAMERA_ADD_EXTRA,
 						"./" + linkText.getText() + ".gif")) {
-					MessageBox messageBox = new MessageBox(btnAdd.getShell(),
-							SWT.ICON_ERROR | SWT.OK);
+					MessageBox messageBox = new MessageBox(new Shell(),
+							SWT.ICON_ERROR | SWT.OK | SWT.APPLICATION_MODAL);
 
 					messageBox.setText("Warning");
 					messageBox.setMessage("No camera under this link!");
+					messageBox.getParent().setBounds(0, 0, 100, 100);
+					System.out.println(messageBox.getParent().getBounds());
 					messageBox.open();
 					
 //					MessageDialog.openWarning(btnAdd.getShell(),"","");
@@ -253,6 +261,12 @@ public class CameraPanel extends Composite implements Observer {
 		
 	}
 
+	public Point getCenterPoint() {
+		Shell parentShell = this.getShell();
+		Rectangle shellBounds = parentShell.getBounds();
+		return new Point(shellBounds.x + shellBounds.width / 2, (shellBounds.y + shellBounds.height) / 2);
+	}
+	
 	@Override
 	public void update(Observable o, Object msg) {
 
