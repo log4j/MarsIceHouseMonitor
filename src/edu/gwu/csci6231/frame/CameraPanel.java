@@ -82,7 +82,6 @@ public class CameraPanel extends Composite implements Observer {
 								model.getW(), model.getH(), 0, 0, VIDEO_WIDTH,
 								VIDEO_HEIGHT);
 					} catch (Exception e1) {
-						System.out.println(model);
 						e1.printStackTrace();
 					}
 
@@ -251,7 +250,6 @@ public class CameraPanel extends Composite implements Observer {
 					messageBox.setText("Warning");
 					messageBox.setMessage("No camera under this link!");
 					messageBox.getParent().setBounds(0, 0, 100, 100);
-					System.out.println(messageBox.getParent().getBounds());
 					messageBox.open();
 					
 //					MessageDialog.openWarning(btnAdd.getShell(),"","");

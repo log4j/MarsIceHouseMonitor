@@ -167,7 +167,6 @@ public class DataModelCamera extends DataModel {
 		this.setChanged();
 		this.notifyObservers(FrameUtil.MSG_ADD_EXTRA_MODEL);
 		
-		System.out.println("Try to notify:"+FrameUtil.MSG_ADD_EXTRA_MODEL);
 	}
 
 	public boolean isRemoved() {
@@ -188,8 +187,6 @@ public class DataModelCamera extends DataModel {
 		// Step 1: Determine the size of the resulting images.
 		int width = imageDatas[0].width;
 		int height = imageDatas[0].height;
-
-		System.out.println(width + " " + height);
 
 		// Step 2: Construct each image.
 		int transition = SWT.DM_FILL_BACKGROUND;

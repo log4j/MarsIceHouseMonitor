@@ -8,8 +8,14 @@ import java.util.Observer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
+import edu.gwu.csci6231.device.DeviceProvider;
 import edu.gwu.csci6231.device.model.DataModel;
 
+/**
+ * Console for common use
+ * @author yangmang
+ *
+ */
 public class Console extends Composite implements Observer{
 
 	
@@ -18,6 +24,7 @@ public class Console extends Composite implements Observer{
 	
 	private List<CameraPanel> cameras;
 	public static int TARGET_CAMERA = 2;
+	protected DeviceProvider sensorProvider;
 	
 	public Console(Composite parent, int mode) {
 		super(parent, mode);
@@ -29,6 +36,10 @@ public class Console extends Composite implements Observer{
 		cameras = new ArrayList<CameraPanel>();
 		
 		
+	}
+	
+	public void setSensorProvider(DeviceProvider provider){
+		this.sensorProvider = provider;
 	}
 	
 	public void addDataModel(DataModel model, int target){
@@ -58,9 +69,6 @@ public class Console extends Composite implements Observer{
 			if(msg.equals(FrameUtil.MSG_REMOVE_MODEL)){
 				for(int i=0;i<cameras.size();i++){
 					if(cameras.get(i).hasModel((DataModel)o)){
-						//remove that model
-//						cameras.get(i).dispose();
-//						cameras.remove(i);
 						cameras.get(i).removeModel();
 					}
 				}

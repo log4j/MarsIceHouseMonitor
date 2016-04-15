@@ -6,7 +6,6 @@ public class ConsoleOperator extends Console{
 
 	public ConsoleOperator(Composite parent, int mode) {
 		super(parent, mode);
-		// TODO Auto-generated constructor stub
 	}
 
 }

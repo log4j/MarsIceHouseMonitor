@@ -1,16 +1,28 @@
 package edu.gwu.csci6231.database;
 
+import java.text.Format;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class SimulatorEvent {
 	
-
+	protected Format namingFormat = new SimpleDateFormat("yyyy_MM_dd_HH_mm_ss");
+	protected String name;
 	protected List<EventInfo> events;
 	
-	public SimulatorEvent(){
+	public SimulatorEvent(String name){
+		this.name = name;
 		events = new ArrayList<EventInfo>();
 	}
+	
+	public SimulatorEvent(){
+		this.name = "event_"+namingFormat.format(new Date());
+		events = new ArrayList<EventInfo>();
+	}
+	
+	
 	
 	public void addEvent(){
 		events.add(new EventInfo("",0,0));
@@ -55,6 +67,10 @@ public class SimulatorEvent {
 		public String toString(){
 			return indicator+" to "+value+" in "+time+"ms";
 		}
+	}
+
+	public String getName() {
+		return name;
 	}
 }
 
