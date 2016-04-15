@@ -1,5 +1,7 @@
 package edu.gwu.csci6231.frame;
 
+import java.text.DecimalFormat;
+import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,7 +19,7 @@ import org.eclipse.swt.widgets.Text;
 
 import edu.gwu.csci6231.database.SimulatorEvent;
 import edu.gwu.csci6231.device.DeviceProvider;
-import edu.gwu.csci6231.device.SensorProvider;
+import edu.gwu.csci6231.device.model.DataModel;
 
 public class DebugEventDialog extends Dialog {
 
@@ -25,6 +27,8 @@ public class DebugEventDialog extends Dialog {
 	public static int LINE_HEIGHT = 30;
 	public static int NUMBER_WIDTH = 70;
 	public static int BUTTON_WIDTH = 70;
+	
+	public static double TIME_SEP = 0.1;
 	
 	private DeviceProvider provider;
 	private Shell shell;
@@ -39,7 +43,10 @@ public class DebugEventDialog extends Dialog {
 	
 	private Button addEventItemBtn,runSimulatorBtn;
 	
+	private Format format = new DecimalFormat("0.0");
+	
 	private Composite tables;
+	
 	
 	protected Runnable runnable = null;
 
@@ -62,7 +69,7 @@ public class DebugEventDialog extends Dialog {
 	
 	public void open() {
 		shell = new Shell(getParent());
-		shell.setText("Add Employee");
+		shell.setText("Debug Tools");
 		draw(); // Contents of Dialog
 		shell.pack();
 		shell.open();
@@ -232,15 +239,59 @@ public class DebugEventDialog extends Dialog {
 		return event;
 	}
 	
+	protected void disableAll(){
+		
+	}
+	protected void setEnableAll(boolean enable){
+		for(int i=0;i<indicators.size();i++){
+			indicators.get(i).setEnabled(enable);
+			values.get(i).setEnabled(enable);
+			times.get(i).setEnabled(enable);
+			removeBtns.get(i).setEnabled(enable);
+		}
+		this.addEventItemBtn.setEnabled(enable);
+	}
+	
 	protected void runSimulator(){
+		setEnableAll(false);
 		this.runnable = new Runnable() {
 			public void run() {
 				// System.out.println("haha");
-				getParent().getDisplay().timerExec(1000, this);
+				
 //				colorTimming = (colorTimming + 1) % 50;
 //				alarmCanvas.redraw();
 				
-				System.out.println("EEE");
+				double timeLeft = Double.parseDouble(times.get(0).getText());
+				timeLeft -= TIME_SEP;
+				
+				if(timeLeft<=0){
+					//execute that event
+					System.out.println("Execute event");
+					
+					provider.getDataModel(indicators.get(0).getText()).takeAction(DataModel.CMD_DEBUG_SET_VALUE, values.get(0).getText());
+					
+					times.get(0).setText("0");
+					
+					//remove that label if that is not the last one
+					if(indicators.size()>1){
+						indicators.remove(0).dispose();
+						values.remove(0).dispose();
+						times.remove(0).dispose();
+						removeBtns.remove(0).dispose();
+						repackLocation();
+						shell.pack();
+						
+					}else{
+						//last one finished!, end loop
+						setEnableAll(true);
+						return;
+					}
+				}else{
+					times.get(0).setText(format.format(timeLeft));
+				}
+				
+				getParent().getDisplay().timerExec((int)(TIME_SEP * 1000), this);
+//				System.out.println("EEE");
 			}
 		};
 		getParent().getDisplay().timerExec(10, runnable);

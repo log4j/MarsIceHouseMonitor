@@ -9,6 +9,7 @@ import edu.gwu.csci6231.device.DeviceProvider;
 public abstract class DataModel extends Observable{
 
 	public static final int CMD_REPAIR = 0x1;
+	public static final int CMD_DEBUG_SET_VALUE = 0x2;
 	public static final int CMD_CAMERA_UP = 0x11;
 	public static final int CMD_CAMERA_DOWN = 0x12;
 	public static final int CMD_CAMERA_LEFT = 0x13;
@@ -91,6 +92,8 @@ public abstract class DataModel extends Observable{
 		this.notifyObservers();
 	}
 	
+	
+	
 	public void setToBestValue(){
 		this.data = this.bestValue;
 		this.setChanged();
@@ -161,6 +164,13 @@ public abstract class DataModel extends Observable{
 
 	public DeviceProvider getProvider() {
 		return provider;
+	}
+
+
+	public void updateValue(double value) {
+		this.data = value;
+		this.setChanged();
+		this.notifyObservers();
 	}
 	
 	

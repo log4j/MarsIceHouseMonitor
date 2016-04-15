@@ -69,12 +69,24 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 	@Override
 	public boolean takeAction(String modelName, int cmd,	String...paras) {
 		DataModel model = this.models.get(modelName);
-		if(model!=null){
-			model.setToBestValue();
-			
-			System.out.println(model.getData());
+		if(model==null){
+			return false;
 		}
-		return false;
+		
+		switch (cmd) {
+		case (DataModel.CMD_REPAIR):
+			model.setToBestValue();
+		
+			break;
+		case (DataModel.CMD_DEBUG_SET_VALUE):
+			model.updateValue(Double.parseDouble(paras[0]));
+			
+			break;
+		default:
+			return false;
+		}
+			
+		return true;
 	}
 
 
