@@ -82,7 +82,7 @@ public class IndicatorPanel extends Composite implements Observer {
 		alarmLabel = new Label(this, SWT.NONE);
 		alarmLabel.setForeground(new Color(null, 255, 0, 0));
 		// fixButton.setText("Send Robot");
-		fixButton.setImage(new Image(this.getDisplay(), "./fix_icon.png"));
+		fixButton.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/fix_icon.png")));
 		fixButton.setSize(30, 30);
 		fixButton.setBounds(170, 30, 30, 30);
 		fixButton.setEnabled(false);

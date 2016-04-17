@@ -131,36 +131,36 @@ public class CameraPanel extends Composite implements Observer {
 		ctrlButtons.setBackground(new Color(null, 79, 43, 120));
 
 		btnDown = new ImageButton(ctrlButtons, SWT.NONE);
-		btnDown.setImage(new Image(ctrlButtons.getDisplay(), "./down.png"));
+		btnDown.setImage(new Image(ctrlButtons.getDisplay(), ClassLoader.getSystemResourceAsStream("img/down.png")));
 		btnDown.setBounds(BUTTON_SIZE - 5, (int) (BUTTON_SIZE * 1.5 + 5),
 				BUTTON_SIZE, BUTTON_SIZE);
 
 		btnUp = new ImageButton(ctrlButtons, SWT.NONE);
-		btnUp.setImage(new Image(this.getDisplay(), "./up.png"));
+		btnUp.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/up.png")));
 		btnUp.setBounds(BUTTON_SIZE - 5, 5, BUTTON_SIZE, BUTTON_SIZE);
 
 		btnLeft = new ImageButton(ctrlButtons, SWT.NONE);
-		btnLeft.setImage(new Image(this.getDisplay(), "./left.png"));
+		btnLeft.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/left.png")));
 		btnLeft.setBounds(5, 15 + (int) (BUTTON_SIZE / 2), BUTTON_SIZE,
 				BUTTON_SIZE);
 
 		btnRight = new ImageButton(ctrlButtons, SWT.NONE);
-		btnRight.setImage(new Image(this.getDisplay(), "./right.png"));
+		btnRight.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/right.png")));
 		btnRight.setBounds(BUTTON_SIZE * 3 / 2 + 5,
 				15 + (int) (BUTTON_SIZE / 2), BUTTON_SIZE, BUTTON_SIZE);
 
 		btnZoomIn = new ImageButton(ctrlButtons, SWT.NONE);
-		btnZoomIn.setImage(new Image(this.getDisplay(), "./zoomin.png"));
+		btnZoomIn.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/zoomin.png")));
 		btnZoomIn.setBounds(5, 10 + BUTTON_SIZE * 5 / 2, BUTTON_SIZE,
 				BUTTON_SIZE);
 
 		btnZoomOut = new ImageButton(ctrlButtons, SWT.NONE);
-		btnZoomOut.setImage(new Image(this.getDisplay(), "./zoomout.png"));
+		btnZoomOut.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/zoomout.png")));
 		btnZoomOut.setBounds(BUTTON_SIZE * 3 / 2 + 5, 10 + BUTTON_SIZE * 5 / 2,
 				BUTTON_SIZE, BUTTON_SIZE);
 
 		btnRemove = new ImageButton(ctrlButtons, SWT.NONE);
-		btnRemove.setImage(new Image(this.getDisplay(), "./close.png"));
+		btnRemove.setImage(new Image(this.getDisplay(), ClassLoader.getSystemResourceAsStream("img/close.png")));
 		btnRemove.setBounds((MENU_WIDTH - BUTTON_SIZE) / 2,
 				10 + BUTTON_SIZE * 7 / 2, BUTTON_SIZE, BUTTON_SIZE);
 
@@ -241,7 +241,7 @@ public class CameraPanel extends Composite implements Observer {
 			@Override
 			public void mouseUp(MouseEvent e) {
 				if (!model.takeAction(DataModel.CMD_CAMERA_ADD,
-						"./" + linkText.getText() + ".gif")) {
+						linkText.getText() + ".gif")) {
 					MessageBox messageBox = new MessageBox(btnAdd.getShell(),
 							SWT.ICON_ERROR | SWT.OK);
 

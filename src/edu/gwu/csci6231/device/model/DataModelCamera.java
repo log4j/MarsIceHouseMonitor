@@ -1,6 +1,6 @@
 package edu.gwu.csci6231.device.model;
 
-import java.io.File;
+import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -83,11 +83,12 @@ public class DataModelCamera extends DataModel {
 	 */
 	public boolean loadSrc(String fileName) {
 		ImageLoader loader = new ImageLoader();
-		File file = new File(fileName);
-		if (!file.exists())
+		
+		InputStream input = ClassLoader.getSystemResourceAsStream("img/"+fileName);
+		if (input == null)
 			return false;
 		//ImageData from GIF, it need to be converted into Image
-		ImageData[] imageDatas = loader.load(fileName);
+		ImageData[] imageDatas = loader.load(input);
 		if (imageDatas != null && imageDatas.length > 0) {
 			oriW = imageDatas[0].width;
 			oriH = imageDatas[0].height;
