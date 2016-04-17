@@ -7,7 +7,16 @@ import java.util.List;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.device.model.DataModelCamera;
 
+/**
+ * CameraProvider for the camera module.
+ * It will load 3 default DataModel for cameras.
+ * @author Mang
+ *
+ */
 public class CameraProvider extends DeviceProvider implements Runnable {
+	/**
+	 * flag for the thread of running update the image source.
+	 */
 	protected boolean running = true;
 
 	public CameraProvider() {
@@ -52,10 +61,10 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 
 	@Override
 	public boolean takeAction(String modelName, int cmd, String... paras) {
-		// TODO Auto-generated method stub
-
+		//get the target model
 		DataModelCamera model = (DataModelCamera) models.get(modelName);
 
+		//take action according to the action type.
 		switch (cmd) {
 		case (DataModel.CMD_CAMERA_ZOOM_IN):
 			model.zoom(true);
@@ -80,29 +89,21 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 			break;
 
 		case (DataModel.CMD_CAMERA_REMOVE):
-
 			model.removeModel();
-			// models.remove(modelName);
-			// this.orderByName.remove(modelName);
-
 			break;
 
 		case (DataModel.CMD_CAMERA_ADD):
 			return model.loadSrc(paras[0]);
 
 		case (DataModel.CMD_CAMERA_ADD_EXTRA):
-			
 			DataModelCamera camera = new DataModelCamera("Camera "+(1+this.orderByName.size()), this);
 			if(camera.loadSrc(paras[0])){
 				this.models.put(camera.getModelName(), camera);
 				this.orderByName.add(camera.getModelName());
-				
 				model.addExtraModel();
 			}else{
 				return false;
 			}
-			
-			
 			break;
 		
 		default:

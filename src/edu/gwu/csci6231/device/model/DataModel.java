@@ -8,6 +8,9 @@ import edu.gwu.csci6231.device.DeviceProvider;
 
 public abstract class DataModel extends Observable{
 
+	/*
+	 * action CMD types
+	 */
 	public static final int CMD_REPAIR = 0x1;
 	public static final int CMD_DEBUG_SET_VALUE = 0x2;
 	public static final int CMD_CAMERA_UP = 0x11;
@@ -20,24 +23,57 @@ public abstract class DataModel extends Observable{
 	public static final int CMD_CAMERA_ADD = 0x18;
 	public static final int CMD_CAMERA_ADD_EXTRA = 0x19;
 	
+	/**
+	 * the basic double-valued data for DataModel.
+	 * 
+	 */
 	protected double data = 0;
+	
+	/**
+	 * the name of model
+	 */
 	protected String modelName;
+	
+	/**
+	 * whether this DataModel should show alarm when value is not proper.
+	 */
 	protected boolean shouldAlarm = true;
+	
+	/**
+	 * 
+	 */
 	protected boolean enableAlarm = true;
 	
 	protected DeviceProvider provider;
 	
+	/**
+	 * the best value for this indicator
+	 */
 	protected double bestValue = 0;
+	/**
+	 * the minimum safe value for this indicator.
+	 */
 	protected double minSafeValue = Double.MIN_VALUE;
+	/**
+	 * the maximum safe value for this indicator
+	 */
 	protected double maxSafeValue = Double.MAX_VALUE;
 	/**
 	 * every time generating a new value, it will randomly plus or minus vibeRate to current data
 	 */
 	protected double vibeRate = 0.01;
-	
+	/**
+	 * there is 50%(default) possibility that next second the data will be added by vibeRate
+	 */
 	protected double howManyPercentageToAdd = 0.5;
 	
+	/**
+	 * double to string
+	 */
 	protected Format fortmat = new DecimalFormat("0.00");
+	/**
+	 * units
+	 */
 	protected String unit = "";
 	
 	
@@ -54,7 +90,10 @@ public abstract class DataModel extends Observable{
 		return false;
 	}
 	
-	
+	/**
+	 * send robot to fix, it need provider to do something
+	 * @return
+	 */
 	public boolean sendRobotToFix(){
 		return provider.takeAction(modelName, DataModel.CMD_REPAIR);
 	}
@@ -86,7 +125,6 @@ public abstract class DataModel extends Observable{
 	
 	
 	public void updateValue(){
-//		System.out.println(newData);
 		this.generateFakeData();
 		this.setChanged();
 		this.notifyObservers();

@@ -23,7 +23,14 @@ public class ConsoleTester extends Console{
 		super(parent, mode);
 		
 		shell = parent.getShell();
+		this.initializeMenus();
 		
+	}
+	
+	/**
+	 * initialize the menus for testing user
+	 */
+	private void initializeMenus(){
 		Menu menuBar = new Menu(shell, SWT.BAR);
         MenuItem cascadeFileMenu = new MenuItem(menuBar, SWT.CASCADE);
         cascadeFileMenu.setText("&Tools");

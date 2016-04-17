@@ -5,12 +5,29 @@ import java.util.Map;
 
 import edu.gwu.csci6231.device.model.DataModel;
 
+/**
+ * abstract class for all Providers.
+ * @author Mang
+ *
+ */
 public abstract class DeviceProvider {
-	
+	/**
+	 * the time interval for update the data in SensorProvider
+	 */
 	public static int REFRESH_RATE = 1000;
+	/**
+	 * the time interval for update CAMERA view
+	 */
 	public static int CAMERA_REFRESH_RATE = 100;
 
+	/**
+	 * Map for DataModel.
+	 * ModelName => DataModel
+	 */
 	protected Map<String,DataModel> models;
+	/**
+	 * The list for storing the DataModel names in order.
+	 */
 	protected List<String> orderByName;
 	
 	public List<String> getDataModelNames(){
@@ -23,6 +40,13 @@ public abstract class DeviceProvider {
 		return null;
 	}
 
+	/**
+	 * Provider can use a specific DataModel to carry out a specific Action with Parameters
+	 * @param modelName
+	 * @param cmd
+	 * @param paras
+	 * @return
+	 */
 	public abstract boolean takeAction (String modelName, int cmd,String...paras);
 	
 	public abstract boolean destory ();

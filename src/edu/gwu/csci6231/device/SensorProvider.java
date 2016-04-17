@@ -4,19 +4,23 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.gwu.csci6231.database.SimulatorEvent;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.device.model.DataModelHumidity;
 import edu.gwu.csci6231.device.model.DataModelOxygen;
 import edu.gwu.csci6231.device.model.DataModelTemperature;
 
+/**
+ * The Provider for all sensor data: temperature, oxygen and so on.
+ * @author Mang
+ *
+ */
 public class SensorProvider extends DeviceProvider implements Runnable{
-
+	/**
+	 * flag for the thread of running update the sensor data.
+	 */
 	protected boolean running = true;
 	
-	
 	public SensorProvider(){
-		
 		models = new HashMap<String,DataModel>();
 		orderByName = new ArrayList<String>();
 		
@@ -29,21 +33,12 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 		new Thread(this).start();
 	}
 	
-	
-
-	
-
-	
-	
-	
-	
 	/**
 	 * mock function: generate all DataModel(s)
 	 * @return
 	 */
 	protected List<DataModel> generateModel(){
 		List<DataModel> list = new ArrayList<DataModel>();
-		
 		
 		DataModel outTemperature = new DataModelTemperature("Outer Temperature", this);
 		outTemperature.setShouldAlarm(false);
@@ -52,19 +47,12 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 		outTemperature.setVibeRate(2.42);
 		list.add(outTemperature);
 		
-		
-		
 		list.add(new DataModelTemperature("Inner Temperature", this));
-		
 		list.add(new DataModelHumidity("Humidity", this));
-		
 		list.add(new DataModelOxygen("Oxygen", this));
 		
 		return list;
 	}
-	
-	
-
 
 	@Override
 	public boolean takeAction(String modelName, int cmd,	String...paras) {
@@ -89,32 +77,11 @@ public class SensorProvider extends DeviceProvider implements Runnable{
 		return true;
 	}
 
-
-
-
-	public boolean runSimulator(SimulatorEvent event){
-		
-		System.out.println(event);
-		
-		return false;
-	}
-
-
-
-
 	@Override
 	public boolean destory() {
 		this.running = false;
 		return false;
 	}
-
-
-
-
-
-
-
-
 
 	@Override
 	public void run() {

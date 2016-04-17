@@ -10,8 +10,6 @@ import org.eclipse.swt.events.PaintEvent;
 import org.eclipse.swt.events.PaintListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
@@ -22,25 +20,43 @@ import org.eclipse.swt.widgets.Text;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.device.model.DataModelCamera;
 
+/**
+ * the panel for displaying camera view
+ * @author Mang
+ *
+ */
 public class CameraPanel extends Composite implements Observer {
 
-	public static int HEIGHT = 210;
-	public static int WIDTH = 330;
-	public static int VIDEO_HEIGHT = 200;
-	public static int VIDEO_WIDTH = 200;
-	public static int PADDING = 5;
-	public static int BUTTON_SIZE = 40;
+	/*
+	 * size config
+	 */
+	public static final int HEIGHT = 210;
+	public static final int WIDTH = 330;
+	public static final int VIDEO_HEIGHT = 200;
+	public static final int VIDEO_WIDTH = 200;
+	public static final int PADDING = 5;
+	public static final int BUTTON_SIZE = 40;
 	public static final int MENU_WIDTH = 115;
 	public static final int MENU_HEIGHT = 200;
-
 	public static final int CANVAS_TIME_X = 80;
 
+	/**
+	 * canvas for the Video part
+	 */
 	protected Canvas videoCanvas;
 
+	/**
+	 * data model
+	 */
 	protected DataModelCamera model;
 
 	protected String modelName = "";
 
+	/**
+	 * two part for the buttons:
+	 * ctrlButtons: Up,Down,Left,Right,Zoom In,Zoom Out,Remove
+	 * settingButtons: Add
+	 */
 	protected Composite ctrlButtons, settingButtons;
 
 	protected ImageButton btnUp, btnDown, btnLeft, btnRight, btnZoomIn,
@@ -77,13 +93,12 @@ public class CameraPanel extends Composite implements Observer {
 
 				if (model != null && !model.isRemoved()) {
 					Image image = model.getImage();
-					try {
-						e.gc.drawImage(image, model.getX(), model.getY(),
-								model.getW(), model.getH(), 0, 0, VIDEO_WIDTH,
-								VIDEO_HEIGHT);
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
+	
+					//draw current image 
+					e.gc.drawImage(image, model.getX(), model.getY(),
+							model.getW(), model.getH(), 0, 0, VIDEO_WIDTH,
+							VIDEO_HEIGHT);
+			
 
 					e.gc.setForeground(FrameUtil.COLOR_WHITE);
 					e.gc.setFont(FrameUtil.FONT_TIME);
@@ -259,12 +274,6 @@ public class CameraPanel extends Composite implements Observer {
 		
 	}
 
-	public Point getCenterPoint() {
-		Shell parentShell = this.getShell();
-		Rectangle shellBounds = parentShell.getBounds();
-		return new Point(shellBounds.x + shellBounds.width / 2, (shellBounds.y + shellBounds.height) / 2);
-	}
-	
 	@Override
 	public void update(Observable o, Object msg) {
 
@@ -305,14 +314,17 @@ public class CameraPanel extends Composite implements Observer {
 
 	}
 
+	/**
+	 * check whether this Panel is for the model
+	 * @param model
+	 * @return
+	 */
 	public boolean hasModel(DataModel model) {
 		return this.model != null
 				&& this.model.getModelName().equals(model.getModelName());
 	}
 
 	public void removeModel() {
-		// this.model = null;
-		// this.modelName = null;
 		videoCanvas.setVisible(false);
 		ctrlButtons.setVisible(false);
 		settingButtons.setVisible(true);

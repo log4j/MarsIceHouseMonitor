@@ -11,6 +11,12 @@ import edu.gwu.csci6231.device.SensorProvider;
 import edu.gwu.csci6231.device.model.DataModel;
 import edu.gwu.csci6231.frame.*;
 
+/**
+ * the start point of our application.
+ * It initializes Providers and the frame.
+ * @author Mang
+ *
+ */
 public class MonitorSystem {
 
 	
@@ -20,7 +26,7 @@ public class MonitorSystem {
 	
 	protected Shell shell;
 	
-	public MonitorSystem(Display display) {
+	public MonitorSystem(Display display, String type) {
 
 		shell = new Shell(display);
 		shell.setText("Mars Ice House 2");
@@ -32,39 +38,35 @@ public class MonitorSystem {
 		
 		sensorProvider = new SensorProvider();
 		
+		Console console;
 		
-//		Console console = new ConsoleOperator(shell,SWT.NONE);
-		Console console = new ConsoleTester(shell,SWT.NONE);
-		
+		if(type!=null &&type.equals("tester")){
+			/**
+			 * one type of console
+			 */
+			console = new ConsoleTester(shell,SWT.NONE);
+		}else{
+			/**
+			 * another type of console
+			 */
+			console = new ConsoleOperator(shell,SWT.NONE);
+		}
+
 		console.setSensorProvider(sensorProvider);
-//		Console consoleTester = new ConsoleTester(shell,SWT.NONE);
-		
-		
 		
 		
 		for(String name: sensorProvider.getDataModelNames()){
 			DataModel model = sensorProvider.getDataModel(name);
 			console.addDataModel(model, Console.TARGET_INDICATOR);
-//			consoleTester.addDataModel(model);
 		}
 		
 		cameraProvider = new CameraProvider();
 		for(String name: cameraProvider.getDataModelNames()){
 			DataModel model = cameraProvider.getDataModel(name);
 			console.addDataModel(model, Console.TARGET_CAMERA);
-//			consoleTester.addDataModel(model);
 		}
 		
-		
-		
-		
-        
-        
-        
 		shell.open();
-
-		
-		
 
 
 		while (!shell.isDisposed()) {
@@ -82,8 +84,10 @@ public class MonitorSystem {
 	
 	public static void main(String args[]) {
 		Display display = Display.getDefault();
-		new MonitorSystem(display);
-//		display.dispose();
-		
+		String type = "tester";
+		if(args!=null && args.length>0){
+			type = args[0];
+		}
+		new MonitorSystem(display,type);
 	}
 }

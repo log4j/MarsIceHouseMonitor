@@ -452,6 +452,9 @@ public class DebugEventDialog extends Dialog {
 		 */
 		this.runnable = new Runnable() {
 			public void run() {
+				if(times.get(0).isDisposed())
+					return;
+				
 				double timeLeft = Double.parseDouble(times.get(0).getText());
 				timeLeft -= TIME_SEP;
 
@@ -483,6 +486,7 @@ public class DebugEventDialog extends Dialog {
 						this);
 			}
 		};
+		
 		getParent().getDisplay().timerExec(10, runnable);
 	}
 

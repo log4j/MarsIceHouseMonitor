@@ -10,9 +10,18 @@ import java.util.List;
 
 import com.mysql.jdbc.Statement;
 
+/**
+ * the util to communicate with database:
+ * including:
+ * create, read, delete
+ * @author Mang
+ *
+ */
 public class DBUtil {
 
-	
+	/**
+	 * the only instance
+	 */
 	private static DBUtil _instance;
 	Connection conn = null;
 	
@@ -27,26 +36,33 @@ public class DBUtil {
 			_instance = new DBUtil();
 		return _instance;
 	}
+	
+	/**
+	 * get connection 
+	 * @return
+	 */
 	public static Connection getConnection(){
 		return DBUtil.getInstance().conn;
 	}
+	
+	/**
+	 * construction, initialize jdbc
+	 */
 	public DBUtil(){
 		try {
-            // The newInstance() call is a work around for some
-            // broken Java implementations
-
             Class.forName("com.mysql.jdbc.Driver").newInstance();
-            
             conn = DriverManager.getConnection(url, user, password);
-
-            
-            
         } catch (Exception ex) {
-            // handle the error
         	ex.printStackTrace();
         }
 	}
 	
+	/**
+	 * insert event,
+	 * insert record in `event`, then `event_item`
+	 * @param event
+	 * @return
+	 */
 	public boolean insertEvent(SimulatorEvent event){
 		
 		if(event==null)
@@ -105,14 +121,17 @@ public class DBUtil {
 		return true;
 	}
 	
+	/**
+	 * remove event according to the id.
+	 * do not delete record in database. change the delete_flag to TRUE only
+	 * @param id
+	 * @return
+	 */
 	public boolean removeEvent(int id){
 		if(id<= 0)
 			return false;
 		
-		
 		PreparedStatement st = null;
-		
-		
 		try {
 			String sqlInsertEvent = "UPDATE `event` SET delete_flag = TRUE WHERE id=?;";
 			st = conn.prepareStatement(sqlInsertEvent);
@@ -130,10 +149,13 @@ public class DBUtil {
 				e.printStackTrace();
 			}
 		}
-		
 		return true;
 	}
 	
+	/**
+	 * get the event list
+	 * @return
+	 */
 	public List<SimulatorEvent> getEventList(){
 		
 		List<SimulatorEvent>events = new ArrayList<SimulatorEvent>();
@@ -182,26 +204,29 @@ public class DBUtil {
 		return events;
 	}
 	
-	public static void main(String args[]){
-//		Connection con = DBUtil.getConnection();
-		
-		SimulatorEvent event = new SimulatorEvent();
-		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",20,10));
-		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",30,4));
-		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",40,5));
-		
-		DBUtil.getInstance().insertEvent(event);
-//		DBUtil.getInstance().removeEvent(4);
-		System.out.println(DBUtil.getInstance().getEventList().size());
-	}
+//	public static void main(String args[]){
+////		Connection con = DBUtil.getConnection();
+//		
+//		SimulatorEvent event = new SimulatorEvent();
+//		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",20,10));
+//		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",30,4));
+//		event.addEvent(new SimulatorEvent.EventInfo("Oxygen",40,5));
+//		
+//		DBUtil.getInstance().insertEvent(event);
+////		DBUtil.getInstance().removeEvent(4);
+//		System.out.println(DBUtil.getInstance().getEventList().size());
+//	}
+	
+	/**
+	 * remove event according to the name.
+	 * do not delete record in database. change the delete_flag to TRUE only
+	 * @param name
+	 * @return
+	 */
 	public boolean removeEvent(String name) {
 		if(name == null)
 			return false;
-		
-		
 		PreparedStatement st = null;
-		
-		
 		try {
 			String sqlInsertEvent = "UPDATE `event` SET delete_flag = TRUE WHERE name=?;";
 			st = conn.prepareStatement(sqlInsertEvent);
@@ -219,7 +244,6 @@ public class DBUtil {
 				e.printStackTrace();
 			}
 		}
-		
 		return true;
 	}
 	

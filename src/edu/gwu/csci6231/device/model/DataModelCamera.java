@@ -15,36 +15,79 @@ import edu.gwu.csci6231.device.DeviceProvider;
 import edu.gwu.csci6231.frame.CameraPanel;
 import edu.gwu.csci6231.frame.FrameUtil;
 
+/**
+ * this is a specific type of DataModel: Camera.
+ * in this DataModel, `data` is not used since all data inside this model should be image resource.
+ * @author Mang
+ *
+ */
 public class DataModelCamera extends DataModel {
 
+	/**
+	 * how many pixels should the camera canvas move when user click "LEFT"/"RIGHT"/"UP"/"DOWN"
+	 */
 	public static final int ONE_MOVEMENT = 15;
 
+	/**
+	 * the position and the area of visible view.
+	 * in canvas, the area (x,y,w,h) will be presented.
+	 */
 	protected int x, y, w, h;
+	/**
+	 * zoom rate
+	 */
 	protected double zoom = 1;
+	/**
+	 * max zoom rate
+	 */
 	protected double zoomMax = 4;
+	/**
+	 * min zoom rate
+	 */
 	protected double zoomMin = 0.5;
 	protected int oriW, oriH;
 
+	/**
+	 * delete flag
+	 */
 	protected boolean isRemoved = false;
 
-	protected ImageLoader loader;
-	protected ImageData[] imageDatas;
+	/**
+	 * all images from one GIF
+	 */
 	protected Image[] images;
+	/**
+	 * which image to display on screen
+	 */
 	protected int imageIndex = 0;
+	/**
+	 * stringify the date
+	 */
 	protected DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
+	/**
+	 * construction
+	 * @param modelName
+	 * @param provider
+	 */
 	public DataModelCamera(String modelName, DeviceProvider provider) {
 		this.modelName = modelName;
 		this.provider = provider;
 	}
 
+	/**
+	 * load the GIF resource.
+	 * when loading, it will calculate the minimum zoom value and the maximum zoom value.
+	 * @param fileName
+	 * @return
+	 */
 	public boolean loadSrc(String fileName) {
-		loader = new ImageLoader();
+		ImageLoader loader = new ImageLoader();
 		File file = new File(fileName);
 		if (!file.exists())
 			return false;
-
-		imageDatas = loader.load(fileName);
+		//ImageData from GIF, it need to be converted into Image
+		ImageData[] imageDatas = loader.load(fileName);
 		if (imageDatas != null && imageDatas.length > 0) {
 			oriW = imageDatas[0].width;
 			oriH = imageDatas[0].height;
@@ -56,24 +99,29 @@ public class DataModelCamera extends DataModel {
 			if (zoom < zoomMin)
 				zoom = zoomMin;
 
+			//default zoom value
 			zoom = zoomMin * 1.25;
-
+			
+			//make the default view into the center
 			x = (int) ((oriW - CameraPanel.VIDEO_WIDTH / zoom) / 2);
 			y = (int) ((oriH - CameraPanel.VIDEO_HEIGHT / zoom) / 2);
 
-			// System.out.println(oriW+" "+oriH);
 			this.updateOutput();
-
-			convertImageDatasToImages();
-
+			//convert ImageData to Image
+			convertImageDatasToImages(imageDatas);
 		}
 
 		this.isRemoved = false;
+		
+		//notify observers
 		this.updateValue();
 
 		return true;
 	}
 
+	/**
+	 * update the display area according to the zoom value
+	 */
 	private void updateOutput() {
 		w = (int) (CameraPanel.VIDEO_WIDTH / zoom);
 		h = (int) (CameraPanel.VIDEO_HEIGHT / zoom);
@@ -85,11 +133,12 @@ public class DataModelCamera extends DataModel {
 			x = 0;
 		if (y < 0)
 			y = 0;
-		//
-		// System.out.printf("%d %d %d %d %d %d %f\n", x, y, w, h, oriW,
-		// oriH,zoomMin);
 	}
 
+	/**
+	 * zoom in or zoom out. if overflowed, set to the max or min value.
+	 * @param in
+	 */
 	public void zoom(boolean in) {
 		if (in) {
 			zoom = 1.25 * zoom;
@@ -102,11 +151,19 @@ public class DataModelCamera extends DataModel {
 			zoom = zoomMin;
 	}
 
+	/**
+	 * move view left or right. if overflowed, set to the most left or most right.
+	 * @param toLeft
+	 */
 	public void moveLeftOrRight(boolean toLeft) {
 		x = (int) (x + (toLeft ? -1 : 1) * ONE_MOVEMENT / zoom);
 		this.updateOutput();
 	}
 
+	/**
+	 * move view up or down. if overflowed, set to the most top or the most bottom.
+	 * @param toUp
+	 */
 	public void moveUpOrDown(boolean toUp) {
 		y = (int) (y + (toUp ? -1 : 1) * ONE_MOVEMENT / zoom);
 		this.updateOutput();
@@ -114,29 +171,29 @@ public class DataModelCamera extends DataModel {
 
 	@Override
 	public void updateValue() {
-		if (!this.isRemoved && imageDatas != null) {
+		if (!this.isRemoved && images != null) {
 			this.updateOutput();
-			imageIndex = (imageIndex + 1) % imageDatas.length;
-
-			// System.out.println(imageIndex);
+			imageIndex = (imageIndex + 1) % images.length;
 			this.setChanged();
 			this.notifyObservers();
 		}
 
 	}
 
-	public ImageData getImageData() {
-		if (this.imageDatas != null)
-			return this.imageDatas[this.imageIndex];
-		return null;
-	}
-
+	/**
+	 * get current display image
+	 * @return
+	 */
 	public Image getImage() {
 		if (this.images != null)
 			return this.images[this.imageIndex];
 		return null;
 	}
 
+	/**
+	 * get current time (in string)
+	 * @return
+	 */
 	public String getTime() {
 		return format.format(new Date());
 	}
@@ -157,16 +214,21 @@ public class DataModelCamera extends DataModel {
 		return h;
 	}
 
+	/**
+	 * remove the model inside this DataModel. it will display an empty camera
+	 */
 	public void removeModel() {
 		this.isRemoved = true;
 		this.setChanged();
 		this.notifyObservers(FrameUtil.MSG_REMOVE_MODEL);
 	}
 	
+	/**
+	 * add an extra camera. It will tell others to make changes.
+	 */
 	public void addExtraModel() {
 		this.setChanged();
 		this.notifyObservers(FrameUtil.MSG_ADD_EXTRA_MODEL);
-		
 	}
 
 	public boolean isRemoved() {
@@ -174,14 +236,14 @@ public class DataModelCamera extends DataModel {
 	}
 
 	public String toString() {
-		return modelName + " images:" + imageDatas.length + " x,y:" + x + ","
+		return modelName + " images:" + images.length + " x,y:" + x + ","
 				+ y + " w,h:" + w + "," + h;
 	}
 
 	/**
 	 * read GIF and convert ImageData to Image
 	 */
-	protected void convertImageDatasToImages() {
+	protected void convertImageDatasToImages(ImageData[] imageDatas) {
 		images = new Image[imageDatas.length];
 
 		// Step 1: Determine the size of the resulting images.

@@ -16,6 +16,11 @@ import org.eclipse.swt.widgets.Label;
 
 import edu.gwu.csci6231.device.model.DataModel;
 
+/**
+ * this panel is used to display data for indicators (from SensorProvider)
+ * @author Mang
+ *
+ */
 public class IndicatorPanel extends Composite implements Observer {
 
 	public static int WIDTH = 220;
@@ -23,7 +28,14 @@ public class IndicatorPanel extends Composite implements Observer {
 	public static int PADDING = 5;
 	protected static int GRAPH_WIDTH = 2;
 
+	/**
+	 * the background graph data for this indicator.
+	 * this INT array has a fixed number of data. it is a loop and graphIndex will tell which one is the first.
+	 */
 	protected int[] graphData;
+	/**
+	 * graphIndex will tell which one is the first
+	 */
 	protected int graphIndex = 0;
 
 	protected DataModel model = null;
@@ -44,7 +56,6 @@ public class IndicatorPanel extends Composite implements Observer {
 		super(parent, mode);
 
 		this.setLayout(null);
-		// this.setSize(200, 120);
 
 		this.initGraphData();
 
@@ -134,10 +145,19 @@ public class IndicatorPanel extends Composite implements Observer {
 		});
 	}
 
+	/**
+	 * initialize the GraphData: the size should be WIDHT/GRAPH_WIDTH. So it can fill the whole panel
+	 */
 	private void initGraphData() {
 		this.graphData = new int[WIDTH / GRAPH_WIDTH];
 	}
 
+	/**
+	 * insert new data.
+	 * By 'insert', it doesn't mean to insert item into GraphData.
+	 * It means to replace the data of [graphIndex+1] with the new value.
+	 * @param value
+	 */
 	private void insertNewGraphData(double value) {
 		this.graphData[this.graphIndex] = (int) ((HEIGHT - 2 * PADDING)
 				* (value - model.getMinSafeValue()) / (model.getMaxSafeValue() - model
