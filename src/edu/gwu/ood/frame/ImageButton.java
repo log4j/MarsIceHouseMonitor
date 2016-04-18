@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;

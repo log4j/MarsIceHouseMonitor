@@ -1,13 +1,13 @@
-package edu.gwu.csci6231.device;
+package edu.gwu.ood.device;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.gwu.csci6231.device.model.DataModel;
-import edu.gwu.csci6231.device.model.DataModelHumidity;
-import edu.gwu.csci6231.device.model.DataModelOxygen;
-import edu.gwu.csci6231.device.model.DataModelTemperature;
+import edu.gwu.ood.device.model.DataModel;
+import edu.gwu.ood.device.model.DataModelHumidity;
+import edu.gwu.ood.device.model.DataModelOxygen;
+import edu.gwu.ood.device.model.DataModelTemperature;
 
 /**
  * The Provider for all sensor data: temperature, oxygen and so on.

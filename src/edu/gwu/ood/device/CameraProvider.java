@@ -1,11 +1,11 @@
-package edu.gwu.csci6231.device;
+package edu.gwu.ood.device;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import edu.gwu.csci6231.device.model.DataModel;
-import edu.gwu.csci6231.device.model.DataModelCamera;
+import edu.gwu.ood.device.model.DataModel;
+import edu.gwu.ood.device.model.DataModelCamera;
 
 /**
  * CameraProvider for the camera module.

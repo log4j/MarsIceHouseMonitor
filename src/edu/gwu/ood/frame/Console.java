@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,8 +8,8 @@ import java.util.Observer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 
-import edu.gwu.csci6231.device.DeviceProvider;
-import edu.gwu.csci6231.device.model.DataModel;
+import edu.gwu.ood.device.DeviceProvider;
+import edu.gwu.ood.device.model.DataModel;
 
 /**
  * Console for common use

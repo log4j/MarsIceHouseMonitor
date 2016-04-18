@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.device;
+package edu.gwu.ood.device;
 
 public class SimulartorProvider {
 

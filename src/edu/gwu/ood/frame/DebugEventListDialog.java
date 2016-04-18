@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,9 +13,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
-import edu.gwu.csci6231.database.DBUtil;
-import edu.gwu.csci6231.database.SimulatorEvent;
-import edu.gwu.csci6231.device.DeviceProvider;
+import edu.gwu.ood.database.DBUtil;
+import edu.gwu.ood.database.SimulatorEvent;
+import edu.gwu.ood.device.DeviceProvider;
 
 /**
  * this is the popup dialog for tester to view the event list stored in DB.

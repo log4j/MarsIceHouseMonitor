@@ -1,10 +1,10 @@
-package edu.gwu.csci6231.device.model;
+package edu.gwu.ood.device.model;
 
 import java.text.DecimalFormat;
 import java.text.Format;
 import java.util.Observable;
 
-import edu.gwu.csci6231.device.DeviceProvider;
+import edu.gwu.ood.device.DeviceProvider;
 
 public abstract class DataModel extends Observable{
 

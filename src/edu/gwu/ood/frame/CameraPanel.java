@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -17,8 +17,8 @@ import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import edu.gwu.csci6231.device.model.DataModel;
-import edu.gwu.csci6231.device.model.DataModelCamera;
+import edu.gwu.ood.device.model.DataModel;
+import edu.gwu.ood.device.model.DataModelCamera;
 
 /**
  * the panel for displaying camera view

@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import java.text.DecimalFormat;
 import java.text.Format;
@@ -17,10 +17,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import edu.gwu.csci6231.database.DBUtil;
-import edu.gwu.csci6231.database.SimulatorEvent;
-import edu.gwu.csci6231.device.DeviceProvider;
-import edu.gwu.csci6231.device.model.DataModel;
+import edu.gwu.ood.database.DBUtil;
+import edu.gwu.ood.database.SimulatorEvent;
+import edu.gwu.ood.device.DeviceProvider;
+import edu.gwu.ood.device.model.DataModel;
 
 /**
  * this is the pop up dialog for editing event and run event for testing users.

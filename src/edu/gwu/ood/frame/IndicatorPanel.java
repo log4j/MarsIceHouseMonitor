@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.frame;
+package edu.gwu.ood.frame;
 
 import java.util.Observable;
 import java.util.Observer;
@@ -14,7 +14,7 @@ import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
-import edu.gwu.csci6231.device.model.DataModel;
+import edu.gwu.ood.device.model.DataModel;
 
 /**
  * this panel is used to display data for indicators (from SensorProvider)

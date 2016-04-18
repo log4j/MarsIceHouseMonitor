@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.database;
+package edu.gwu.ood.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

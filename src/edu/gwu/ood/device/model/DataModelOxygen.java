@@ -1,6 +1,6 @@
-package edu.gwu.csci6231.device.model;
+package edu.gwu.ood.device.model;
 
-import edu.gwu.csci6231.device.DeviceProvider;
+import edu.gwu.ood.device.DeviceProvider;
 
 public class DataModelOxygen extends DataModel {
 

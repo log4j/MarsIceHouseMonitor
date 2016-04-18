@@ -1,9 +1,9 @@
-package edu.gwu.csci6231.device;
+package edu.gwu.ood.device;
 
 import java.util.List;
 import java.util.Map;
 
-import edu.gwu.csci6231.device.model.DataModel;
+import edu.gwu.ood.device.model.DataModel;
 
 /**
  * abstract class for all Providers.

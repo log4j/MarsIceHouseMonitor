@@ -1,15 +1,15 @@
-package edu.gwu.csci6231.system;
+package edu.gwu.ood.system;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 
-import edu.gwu.csci6231.device.CameraProvider;
-import edu.gwu.csci6231.device.DeviceProvider;
-import edu.gwu.csci6231.device.SensorProvider;
-import edu.gwu.csci6231.device.model.DataModel;
-import edu.gwu.csci6231.frame.*;
+import edu.gwu.ood.device.CameraProvider;
+import edu.gwu.ood.device.DeviceProvider;
+import edu.gwu.ood.device.SensorProvider;
+import edu.gwu.ood.device.model.DataModel;
+import edu.gwu.ood.frame.*;
 
 /**
  * the start point of our application.

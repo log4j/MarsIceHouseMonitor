@@ -1,4 +1,4 @@
-package edu.gwu.csci6231.device.model;
+package edu.gwu.ood.device.model;
 
 import java.io.InputStream;
 import java.text.DateFormat;
@@ -11,9 +11,9 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 
-import edu.gwu.csci6231.device.DeviceProvider;
-import edu.gwu.csci6231.frame.CameraPanel;
-import edu.gwu.csci6231.frame.FrameUtil;
+import edu.gwu.ood.device.DeviceProvider;
+import edu.gwu.ood.frame.CameraPanel;
+import edu.gwu.ood.frame.FrameUtil;
 
 /**
  * this is a specific type of DataModel: Camera.
