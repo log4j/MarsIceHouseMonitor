@@ -30,7 +30,7 @@ public class MonitorSystem {
 
 		shell = new Shell(display);
 		shell.setText("Mars Ice House 2");
-		shell.setSize(910, 470);
+		shell.setSize(930, 500);
 
 		this.display = display;
 		

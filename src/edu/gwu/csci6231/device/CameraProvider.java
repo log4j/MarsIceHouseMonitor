@@ -97,13 +97,14 @@ public class CameraProvider extends DeviceProvider implements Runnable {
 
 		case (DataModel.CMD_CAMERA_ADD_EXTRA):
 			DataModelCamera camera = new DataModelCamera("Camera "+(1+this.orderByName.size()), this);
-			if(camera.loadSrc(paras[0])){
+			//if(camera.loadSrc(paras[0])){
+		camera.loadSrc(paras[0]);
 				this.models.put(camera.getModelName(), camera);
 				this.orderByName.add(camera.getModelName());
 				model.addExtraModel();
-			}else{
-				return false;
-			}
+			//}else{
+				//return false;
+			//}
 			break;
 		
 		default:
